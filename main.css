@@ -13,7 +13,7 @@ body.loading video {
 }
 
 body.loading:before {
-    content: "Loading Model...";
+    content: "Loading Model... is it?";
     color: white;
     text-align: center;
     width: 100%;
