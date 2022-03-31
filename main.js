@@ -1,5 +1,8 @@
 /*jshint esversion:6*/
 
+
+
+/*
 $(function() {
     const video = $("video")[0];
 
@@ -159,3 +162,4 @@ $(function() {
         });
     };
 });
+*/
