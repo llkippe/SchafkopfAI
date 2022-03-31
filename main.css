@@ -19,7 +19,7 @@ body.loading:before {
     width: 100%;
     position: absolute;
     top: 20px;
-    font-size: 3em;
+    font-size: 2em;
     font-weight: bold;
     z-index: 100;
 }
