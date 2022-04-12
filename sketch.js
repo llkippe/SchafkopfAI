@@ -1,15 +1,11 @@
 var video;
 var model;
-
 var predictions;
-
 var publishable_key = "rf_twpQdZ4Evm1CMiYC8138";
 var toLoad = {
         model: "completedeckv2",
-        version: 1 // <<<--- YOUR VERSION THERE
+        version: 1
 };
-
-
 
 
 
@@ -28,21 +24,17 @@ function draw() {
     image(capture,0,0,416,416);
     if(predictions) {
         predictions.forEach(function(prediction) {
-
             var x = prediction.bbox.x;
             var y = prediction.bbox.y;
-
             var width = prediction.bbox.width;
             var height = prediction.bbox.height;
 
             var zeichen = prediction.class.substring(0,prediction.class.length-1)
             var farbe = prediction.class.substring(prediction.class.length-1)
-
-            console.log(x,y)
+            console.log(farbe,zeichen)
 
             noFill();
             strokeWeight(3);
-
             var color;
             if(farbe == "e") color = "#f2f22e"
             if(farbe == "b") color= "#10bd0d"
@@ -51,10 +43,32 @@ function draw() {
 
             stroke(color);
             rect(x,y,width,height)
-            fill(0)
-            text(zeichen + "  " + prediction.confidence)
+
+            textSize(20);
+            stroke(10);
+            strokeWeight(2);
+            text(convertToFullName(zeichen,farbe) + "  " + int(prediction.confidence*100), x - width/2 + 5, y - height/2 + 22)
         });
     }
+}
+
+function convertToFullName(zeichen, farbe) {
+    var name;
+
+    if(farbe == "e") name = "Eichel"
+    if(farbe == "b") name = "Blatt"
+    if(farbe == "h") name = "Herz"
+    if(farbe == "s") name = "Schellen"
+    name += " ";
+    if(zeichen == 'A') name+= "Ass"
+    if(zeichen == '10') name+= "Zehn"
+    if(zeichen == 'K') name+= "König"
+    if(zeichen == 'O') name+= "Ober"
+    if(zeichen == 'U') name+= "Unter"
+    if(zeichen == '9') name+= "Neun"
+    if(zeichen == '8') name+= "Acht"
+    if(zeichen == '7') name+= "Sieben"
+    return name;
 }
 
 
@@ -74,7 +88,6 @@ const detectFrame = function() {
         requestAnimationFrame(detectFrame);
     });
 };
-
 const loadModelPromise = new Promise(function(resolve, reject) {
     roboflow.auth({
         publishable_key: publishable_key
@@ -83,7 +96,6 @@ const loadModelPromise = new Promise(function(resolve, reject) {
         resolve();
     });
 });
-
 Promise.all([
     loadModelPromise
 ]).then(function() {
