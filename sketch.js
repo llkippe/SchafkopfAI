@@ -4,7 +4,7 @@ var predictions;
 var publishable_key = "rf_twpQdZ4Evm1CMiYC8138";
 var toLoad = {
         model: "completedeckv2",
-        version: 1
+        version: 2
 };
 
 
