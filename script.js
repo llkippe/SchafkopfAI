@@ -31,19 +31,32 @@ function enableCam(event) {
     if (!model) {
         return;
     }
+
+    if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
+      throw new DOMException('getUserMedia not supported in this browser');
+    }
     
     // Hide the button once clicked.
     event.target.classList.add('removed');  
     
     // getUsermedia parameters to force video but not audio.
     const constraints = {
-        video: true
+        video: true,
+        audio: false
     };
+
+    
+    video.setAttribute('playsinline', '');
   
     // Activate the webcam stream.
     navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
-        video.srcObject = stream;
-        video.addEventListener('loadeddata', predictWebcam);
+      video.srcObject = stream;
+      //video.addEventListener('loadeddata', predictWebcam);
+
+      video.addEventListener('loadedmetadata', function() {
+        video.play();
+        predictWebcam()
+      });
     });
 }
 
@@ -54,7 +67,7 @@ var model = undefined;
 
 async function load_model() {
   try {
-    model = await tf.loadGraphModel('https://raw.githubusercontent.com/llkippe/SchafkopfAI/main/fullDeckV2_web_model/model.json'); //repo where model is saved
+    model = await tf.loadGraphModel('https://raw.githubusercontent.com/llkippe/SchafkopfAI/main/fullDeckV2_web_model/model.json');
 } catch(e) {
    console.log(e);
 }
