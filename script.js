@@ -54,7 +54,7 @@ var model = undefined;
 
 async function load_model() {
   try {
-    model = await tf.loadGraphModel('https://raw.githubusercontent.com/llkippe/SchafkopfAI/main/fullDeckV2_web_model/model.json');
+    model = await tf.loadGraphModel('https://raw.githubusercontent.com/llkippe/SchafkopfAI/main/fullDeckV2_web_model/model.json'); //repo where model is saved
 } catch(e) {
    console.log(e);
 }
