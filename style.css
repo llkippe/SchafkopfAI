@@ -1,52 +1,41 @@
 body {
-    font-family: helvetica, arial, sans-serif;
-    margin: 2em;
-    color: #3D3D3D;
-  }
+    margin: 0;
+    padding: 0;
+    font-family: arial;
+    color: #1b1b1b;
+}
   
-  h1 {
-    font-style: italic;
-    color: #FF6F00;
-  }
-  
-  video {
+video {
     display: block;
-  }
-  
-  section {
-    opacity: 1;
-    transition: opacity 500ms ease-in-out;
-  }
+}
 
-  .removed {
-    display: none;
-  }
+.modelloading {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 40px;
+}
+
+.modelloaded {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 40px;
+}
+
+.removed {
+  display: none;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+ 
   
-  .invisible {
-    opacity: 0.2;
-  }
-  
-  .camView {
-    position: relative;
-    float: left;
-    width: calc(100% - 20px);
-    margin: 10px;
-    cursor: pointer;
-  }
-  
-  .camView p {
-    position: absolute;
-    padding: 5px;
-    background-color: rgba(255, 111, 0, 0.85);
-    color: #FFF;
-    border: 1px dashed rgba(255, 255, 255, 0.7);
-    z-index: 2;
-    font-size: 12px;
-  }
-  
-  .highlighter {
-    background: rgba(0, 255, 0, 0.25);
-    border: 1px dashed #fff;
-    z-index: 1;
-    position: absolute;
-  }

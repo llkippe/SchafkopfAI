@@ -1,159 +1,186 @@
-tf.setBackend('webgl');
-tf.ready().then(() => {
-  load_model();
-
-});
+var model;
 
 const video = document.getElementById('webcam');
-const liveView = document.getElementById('liveView');
-const demosSection = document.getElementById('demos');
 const enableWebcamButton = document.getElementById('webcamButton');
 const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
 
-// Check if webcam access is supported.
-function getUserMediaSupported() {
-    return !!(navigator.mediaDevices &&
-      navigator.mediaDevices.getUserMedia);
-}
-  
-// If webcam supported, add event listener to button for when user
-// wants to activate it to call enableCam function which we will 
-// define in the next step.
+const ctx = canvas.getContext('2d');
+const labelMap = ["b10", "e10", "h10", "s10", "b7", "e7", "h7", "s7", "b8", "e8", "h8", "s8", "b9", "e9", "h9", "s9", "bA", "eA", "hA", "sA","bK", "eK", "hK", "sK","bO", "eO", "hO", "sO","bU", "eU", "hU", "sU"]
+
+
+tf.setBackend('webgl');
+tf.ready().then(() => {
+  loadModel();
+});
+
+loadModel().then(function () {
+    var loadingModel = document.getElementsByClassName("modelloading")[0];
+    loadingModel.classList.add("removed");
+    var modelloaded = document.getElementsByClassName("modelloaded")[0];
+    modelloaded.classList.remove("removed");
+});
+
 if (getUserMediaSupported()) {
     enableWebcamButton.addEventListener('click', enableCam);
 } else {
     console.warn('getUserMedia() is not supported by your browser');
 }
   
-function enableCam(event) {
-    // Only continue if the COCO-SSD has finished loading.
-    if (!model) {
-        return;
+
+var xBoxes = [];
+var yBoxes = [];
+var widthBoxes = [];
+var heightBoxes = [];
+var confidenceCards = [];
+var nameCards = [];
+
+function showPredictions() {
+
+  var color;
+  ctx.lineWidth = 2;
+
+  ctx.drawImage(video, 0, 0, 416, 416);
+
+  for(var i = 0; i < nameCards.length; i++) {
+    
+    var zeichen = nameCards[i].substring(1,nameCards[i].length);
+    var farbe = nameCards[i].substring(0, 1);
+
+    var anzeigeName = convertToFullName(zeichen,farbe) + "  " + parseInt(confidenceCards[i]*100) + "%";
+
+      if(farbe == "e") color = "#f2f22e"
+      if(farbe == "b") color= "#10bd0d"
+      if(farbe == "h") color = "#f20f34"
+      if(farbe == "s") color = "#e0741b"
+
+      ctx.font = "15px Arial";
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+
+      ctx.beginPath()
+      ctx.rect(xBoxes[i]*416, yBoxes[i]*416, widthBoxes[i]*416, heightBoxes[i]*416)
+      ctx.stroke();
+
+      ctx.beginPath()
+      ctx.rect(xBoxes[i]*416, yBoxes[i]*416, ctx.measureText(anzeigeName).width + 8, 18)
+      ctx.fill();
+
+      ctx.fillStyle = "#3b3b3b";
+      ctx.beginPath()
+      ctx.fillText(anzeigeName, xBoxes[i]*416 + 4, yBoxes[i]*416 + 13);
+      ctx.stroke();
     }
-
-    if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
-      throw new DOMException('getUserMedia not supported in this browser');
-    }
-    
-    // Hide the button once clicked.
-    event.target.classList.add('removed');  
-    
-    // getUsermedia parameters to force video but not audio.
-    const constraints = {
-        video: true,
-        audio: false
-    };
-
-    
-    video.setAttribute('playsinline', '');
-  
-    // Activate the webcam stream.
-    navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
-      video.srcObject = stream;
-      //video.addEventListener('loadeddata', predictWebcam);
-
-      video.addEventListener('loadedmetadata', function() {
-        video.play();
-        predictWebcam()
-      });
-    });
+  window.requestAnimationFrame(showPredictions);
 }
 
-
-// Store the resulting model in the global scope of our app.
-var model = undefined;
-
-
-async function load_model() {
-  try {
-    model = await tf.loadGraphModel('https://raw.githubusercontent.com/llkippe/SchafkopfAI/main/fullDeckV2_web_model/model.json');
-} catch(e) {
-   console.log(e);
-}
-    
-
-}
-// Before we can use COCO-SSD class we must wait for it to finish
-// loading. Machine Learning models can be large and take a moment 
-// to get everything needed to run.
-// Note: cocoSsd is an external object loaded from our index.html
-// script tag import so ignore any warning in Glitch.
-load_model().then(function () {
-  // Show demo section now model is ready to use.
-  demosSection.classList.remove('invisible');
-});
-
-var predictionsReal;
-
-function predictWebcam() {
-  // Now let's start classifying a frame in the stream.
-  //console.log(predictionsReal);
-
+function predict() {
   const tfimg = tf.browser.fromPixels(video)
   const resized = tf.image.resizeBilinear(tfimg, [416,416]).div(tf.scalar(255))
   const casted = tf.cast(resized, dtype = 'float32');
   const expandedimg = casted.transpose([0,1,2]).expandDims();
 
-
-
-
-
   model.executeAsync(expandedimg).then(async function (predictions) {
-    
     const boxes = await predictions[0].data();
     const scores = await predictions[1].data();
     const classes = await predictions[2].data();
-    const numOfObjects = await predictions[3].data();
-    
-    //console.log(boxes)
-    //console.log(scores)
-    //console.log(classes)
-    //console.log(numOfObjects)
-    
 
-
-    drawRect(boxes, classes, scores, 0.3, 624, 416);
+    saveRectData(boxes, classes, scores, 0.5);
 
     tf.dispose(tfimg)
     tf.dispose(resized)
     tf.dispose(casted)
     tf.dispose(expandedimg)
- 
-   
-    
-    // Call this function again to keep predicting when the browser is ready.
-    window.requestAnimationFrame(predictWebcam);
+
+    window.requestAnimationFrame(predict);
   });
 }
 
+function saveRectData(boxes,classes,scores,threshold) {
+  xBoxes = [];
+  yBoxes = [];
+  widthBoxes = [];
+  heightBoxes = [];
+  confidenceCards = [];
+  nameCards = [];
 
-const labelMap = ["b10", "e10", "h10", "s10", "b7", "e7", "h7", "s7", "b8", "e8", "h8", "s8", "b9", "e9", "h9", "s9", "bA", "eA", "hA", "sA","bK", "eK", "hK", "sK","bO", "eO", "hO", "sO","bU", "eU", "hU", "sU"]
+  for(var i = 0; i < 10; i++) {
+    if(scores[i] > 0.5){
+      //const [xMin,yMin,xMax,yMax] = boxes[i];
+      className = labelMap[classes[i]];
 
-function drawRect(boxes,classes,scores,threshold,imgWidth,imgHeight) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  document.getElementById("result").innerHTML = '' 
+      var xMin = boxes[i*4];
+      var yMin = boxes[i*4+1];
+      var xMax = boxes[i*4+2];
+      var yMax = boxes[i*4+3];
 
-  for(let i = 0; i < 10; i++) {
-    if(scores[i] > 0.3){
-      const [xMin,yMin,xMax,yMax] = boxes;
-      classIndex = classes[i]
+      xBoxes.push(xMin);
+      yBoxes.push(yMin);
+      widthBoxes.push(xMax-xMin);
+      heightBoxes.push(yMax-yMin);
 
-      ctx.strokeStyle = 'red'
-      ctx.lineWidth = 3
-  
-
-      console.log(labelMap[classIndex]) 
-
-      neu = document.getElementById("result").innerHTML
-      neu += ", " + labelMap[classIndex]
-      document.getElementById("result").innerHTML = neu
-      ctx.beginPath()
-      ctx.rect(xMin*imgWidth, yMin*imgHeight, (xMax-xMin)*imgWidth/1.5, (yMax-yMin)*imgHeight/1)
-      ctx.fillText(classIndex, xMin, yMin);
-      ctx.stroke();
-    
+      confidenceCards.push(scores[i])
+      nameCards.push(className)
     }  
   }
+}
+
+function getUserMediaSupported() {
+  return !!(navigator.mediaDevices &&
+    navigator.mediaDevices.getUserMedia);
+}
+async function loadModel() {
+  try {
+    model = await tf.loadGraphModel('https://raw.githubusercontent.com/llkippe/SchafkopfAI/main/fullDeckV2_web_model/model.json');
+  } catch(e) {
+    console.log(e);
+  } 
+}
+function enableCam(event) {
+  if (!model) {
+      return;
+  }
+
+  event.target.classList.add('removed');  
+  
+  const constraints = {
+      video: true,
+      audio: false
+  };
+
+  video.setAttribute('playsinline', '');
+
+  navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+    video.srcObject = stream;
+    video.addEventListener('loadedmetadata', function() {
+      video.play();
+
+      var modelloaded = document.getElementsByClassName("modelloaded")[0];
+      modelloaded.classList.add("removed");
+      var webcamstarted = document.getElementsByClassName("webcamstarted")[0];
+      webcamstarted.classList.remove("removed");
+
+      
+      showPredictions()
+      predict()
+    });
+  });
+}
+function convertToFullName(zeichen, farbe) {
+  var name;
+
+  if(farbe == "e") name = "Eichel"
+  if(farbe == "b") name = "Blatt"
+  if(farbe == "h") name = "Herz"
+  if(farbe == "s") name = "Schellen"
+  name += " ";
+  if(zeichen == 'A') name+= "Ass"
+  if(zeichen == '10') name+= "Zehn"
+  if(zeichen == 'K') name+= "König"
+  if(zeichen == 'O') name+= "Ober"
+  if(zeichen == 'U') name+= "Unter"
+  if(zeichen == '9') name+= "Neun"
+  if(zeichen == '8') name+= "Acht"
+  if(zeichen == '7') name+= "Sieben"
+  return name;
 }
 
