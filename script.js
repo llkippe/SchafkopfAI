@@ -7,6 +7,13 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const labelMap = ["b10", "e10", "h10", "s10", "b7", "e7", "h7", "s7", "b8", "e8", "h8", "s8", "b9", "e9", "h9", "s9", "bA", "eA", "hA", "sA","bK", "eK", "hK", "sK","bO", "eO", "hO", "sO","bU", "eU", "hU", "sU"]
 
+var videoWidth = 1920/2.5;
+var videoHeight = 1080/2.5;
+
+var minThreshold = 0.55;
+
+canvas.width = videoWidth;
+canvas.height = videoHeight;
 
 tf.setBackend('webgl');
 tf.ready().then(() => {
@@ -24,8 +31,7 @@ if (getUserMediaSupported()) {
     enableWebcamButton.addEventListener('click', enableCam);
 } else {
     console.warn('getUserMedia() is not supported by your browser');
-}
-  
+} 
 
 var xBoxes = [];
 var yBoxes = [];
@@ -35,11 +41,10 @@ var confidenceCards = [];
 var nameCards = [];
 
 function showPredictions() {
-
   var color;
   ctx.lineWidth = 2;
 
-  ctx.drawImage(video, 0, 0, 416, 416);
+  ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
 
   for(var i = 0; i < nameCards.length; i++) {
     
@@ -58,16 +63,17 @@ function showPredictions() {
       ctx.fillStyle = color;
 
       ctx.beginPath()
-      ctx.rect(xBoxes[i]*416, yBoxes[i]*416, widthBoxes[i]*416, heightBoxes[i]*416)
+      ctx.rect(xBoxes[i]*videoWidth, yBoxes[i]*videoHeight, widthBoxes[i]*videoWidth, heightBoxes[i]*videoHeight)
       ctx.stroke();
 
       ctx.beginPath()
-      ctx.rect(xBoxes[i]*416, yBoxes[i]*416, ctx.measureText(anzeigeName).width + 8, 18)
+      ctx.rect(xBoxes[i]*videoWidth, yBoxes[i]*videoHeight, ctx.measureText(anzeigeName).width + 8, 18)
       ctx.fill();
 
-      ctx.fillStyle = "#3b3b3b";
+      ctx.textAlign = "left"
+      ctx.fillStyle = "#242424";
       ctx.beginPath()
-      ctx.fillText(anzeigeName, xBoxes[i]*416 + 4, yBoxes[i]*416 + 13);
+      ctx.fillText(anzeigeName, xBoxes[i]*videoWidth + 4, yBoxes[i]*videoHeight + 13);
       ctx.stroke();
     }
   window.requestAnimationFrame(showPredictions);
@@ -104,8 +110,7 @@ function saveRectData(boxes,classes,scores,threshold) {
   nameCards = [];
 
   for(var i = 0; i < 10; i++) {
-    if(scores[i] > 0.5){
-      //const [xMin,yMin,xMax,yMax] = boxes[i];
+    if(scores[i] > minThreshold){
       className = labelMap[classes[i]];
 
       var xMin = boxes[i*4];
@@ -140,6 +145,18 @@ function enableCam(event) {
       return;
   }
 
+  var modelloaded = document.getElementsByClassName("modelloaded")[0];
+  modelloaded.classList.add("removed");
+  var webcamstarted = document.getElementsByClassName("webcamstarted")[0];
+  webcamstarted.classList.remove("removed");
+
+  ctx.textAlign = "center"
+  ctx.font = "20px Arial";
+  ctx.fillStyle = "#242424";
+  ctx.beginPath()
+  ctx.fillText("starting webcam...", canvas.width/2, canvas.height/2);
+  ctx.stroke();
+
   event.target.classList.add('removed');  
   
   const constraints = {
@@ -152,14 +169,7 @@ function enableCam(event) {
   navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
     video.srcObject = stream;
     video.addEventListener('loadedmetadata', function() {
-      video.play();
-
-      var modelloaded = document.getElementsByClassName("modelloaded")[0];
-      modelloaded.classList.add("removed");
-      var webcamstarted = document.getElementsByClassName("webcamstarted")[0];
-      webcamstarted.classList.remove("removed");
-
-      
+      video.play();   
       showPredictions()
       predict()
     });

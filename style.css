@@ -2,7 +2,15 @@ body {
     margin: 0;
     padding: 0;
     font-family: arial;
-    color: #1b1b1b;
+    color: #242424;
+}
+p {
+  margin: 0;
+  padding: 0;
+}
+button {
+  margin: 0;
+  padding: 0;
 }
   
 video {
@@ -17,9 +25,8 @@ video {
   justify-content: center;
   align-items: center;
 
-  font-size: 40px;
+  font-size: 20px;
 }
-
 .modelloaded {
   width: 100vw;
   height: 100vh;
@@ -29,6 +36,14 @@ video {
   align-items: center;
 
   font-size: 40px;
+}
+.webcamstarted {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .removed {
