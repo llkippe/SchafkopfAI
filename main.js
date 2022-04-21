@@ -6,5 +6,9 @@ canvas.height = 416;
 
 var deck = new DECK();
 
+var spieler = [];
 
-
+function selectedSpieler() {
+    canvas.classList.remove("removed");
+    enableCam();
+}

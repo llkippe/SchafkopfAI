@@ -21,9 +21,7 @@ tf.ready().then(() => {
 
 
 loadModel().then(function () {
-    var loadingModel = document.getElementsByClassName("modelloading")[0];
-    loadingModel.classList.add("removed");
-    if(getUserMediaSupported()) enableCam();
+    //enableCam();
 });
 
 
@@ -42,11 +40,16 @@ function checkForDetectedCards() {
             if(lastCards[i].farbe != firstFarbe || lastCards[i].symbol != firstSymbol) allSameCard = false;
         }
 
-        // add card too kispieler
+        if(allSameCard) {
+          // add card too kispieler
+        }
     } 
 }
 
 function showPredictions() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+
   var color;
   ctx.lineWidth = 2;
 
@@ -144,20 +147,27 @@ async function loadModel() {
       console.log(e);
     } 
 }
-  function getUserMediaSupported() {
-    return !!(navigator.mediaDevices &&
-      navigator.mediaDevices.getUserMedia);
-}
+ 
 function enableCam(event) {
+  ctx.textAlign = "center"
+  ctx.font = "20px Arial";
+  ctx.fillStyle = "#242424";
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if(!navigator.mediaDevices && !navigator.mediaDevices.getUserMedia) {
+    console.log("no webcam support")
+    ctx.beginPath()
+    ctx.fillText("loading model...", canvas.width/2, canvas.height/2);
+    ctx.stroke();
+  }else{
     if (!model) {
-        return;
+      ctx.beginPath()
+      ctx.fillText("loading model...", canvas.width/2, canvas.height/2);
+      ctx.stroke();
+      enableCam();
     }
-    var webcamstarted = document.getElementsByClassName("webcamstarted")[0];
-    webcamstarted.classList.remove("removed");
-  
-    ctx.textAlign = "center"
-    ctx.font = "20px Arial";
-    ctx.fillStyle = "#242424";
+
     ctx.beginPath()
     ctx.fillText("starting webcam...", canvas.width/2, canvas.height/2);
     ctx.stroke();
@@ -165,8 +175,8 @@ function enableCam(event) {
     //event.target.classList.add('removed');  
     
     const constraints = {
-        video: true,
-        audio: false
+      video: true,
+      audio: false
     };
   
     video.setAttribute('playsinline', '');
@@ -183,4 +193,5 @@ function enableCam(event) {
         predict()
       });
     });
+  }
 }

@@ -8,18 +8,33 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js" type="text/javascript"></script>
 
+    <script src="spieler.js"></script>
     <script src="karte.js"></script>
     <script src="deck.js"></script>
   </head>  
   <body>
-    <section class="modelloading">
-      <p>loading model...</p>
+
+    <section class="selectSpieler">
+      <div class="selectionContainer">
+        <h2>Player Selection</h2>
+        <p>Type in the name of every player.</p>
+        <p>Leave out KI position.</p>
+
+
+        <input type="text" id="first" placeholder="name of player one">
+        <input type="text" id="first" placeholder="name of player two">
+        <input type="text" id="first" placeholder="name of player three">
+        <input type="text" id="first" placeholder="name of player four">
+
+        <button onclick="selectedSpieler()">continue</button>
+      </div>
+      
     </section>
 
-    <section class="webcamstarted removed">
+    
       <video id="webcam" class="removed"></video>
-      <canvas id="canvas" width="416" height="416"></canvas>
-    </section>
+      <canvas id="canvas" class="removed"></canvas>
+    
 
     <script src="kartenDetection.js"></script>
     <script src="main.js"></script>
