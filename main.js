@@ -10,5 +10,9 @@ var spieler = [];
 
 function selectedSpieler() {
     canvas.classList.remove("removed");
+    
+    var selectSpieler = document.getElementsByClassName("selectSpieler")[0];
+    selectSpieler.classList.add("removed");
+
     enableCam();
 }
