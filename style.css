@@ -16,6 +16,10 @@ video {
     display: block;
 }
 
+
+
+/* STATE == selectSpieler */
+
 .selectSpieler {
   display: flex;
 
@@ -60,6 +64,7 @@ video {
 }
 input:hover {
   background-color: #47505f;
+  width: 310px;
 }
 input:focus {
   outline: none;
@@ -73,17 +78,38 @@ input::placeholder{
 
 .selectionContainer button {
   height: 64px;
-    width: 140px;
-    border-radius: 1000px;
-    margin-bottom: 20px;
-    margin-top: 0px;
-    border: none;
-    color: white;
-    font-family: sans-serif;
-    font-size: 18px;
-    background: linear-gradient(to right, rgb(162,0,255), rgb(74,15,236));
-    transition: 0.2s;
+  width: 140px;
+  border-radius: 1000px;
+  margin-bottom: 20px;
+  margin-top: 0px;
+  border: none;
+  color: white;
+  font-family: sans-serif;
+  font-size: 18px;
+  background: linear-gradient(to right, rgb(162,0,255), rgb(74,15,236));
+  transition: 0.2s;
 }
+
+.selectionContainer button:hover{
+  width: 170px;
+}
+.selectionContainer button:focus{
+  width: 170px;
+  outline: none;
+}
+/* STATE == getKIKarten */
+
+.carddetection {
+  width: 50vw;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.carddetection canvas{
+  border-radius: 10px;
+}
+
 
 
 .removed {

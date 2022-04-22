@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js" type="text/javascript"></script>
 
+    <script src="stateManager.js"></script>
     <script src="spieler.js"></script>
     <script src="karte.js"></script>
     <script src="deck.js"></script>
@@ -21,19 +22,41 @@
         <p>Leave out KI position.</p>
 
 
-        <input type="text" id="first" placeholder="name of player one">
-        <input type="text" id="first" placeholder="name of player two">
-        <input type="text" id="first" placeholder="name of player three">
-        <input type="text" id="first" placeholder="name of player four">
+        <input type="text" id="first" placeholder="name of player one" onchange="selectSpieler.checkNames(event)">
+        <input type="text" id="second" placeholder="name of player two" onchange="selectSpieler.checkNames(event)">
+        <input type="text" id="third" placeholder="name of player three" onchange="selectSpieler.checkNames(event)">
+        <input type="text" id="fourth" placeholder="name of player four" onchange="selectSpieler.checkNames(event)">
 
-        <button onclick="selectedSpieler()">continue</button>
+        <button onclick="selectSpieler.nextState()">continue</button>
       </div>
-      
     </section>
 
     
-      <video id="webcam" class="removed"></video>
+    <video id="webcam" class="removed"></video>
+
+    <section class="carddetection">
       <canvas id="canvas" class="removed"></canvas>
+      <form>
+        <select name="farbe">
+          <option>Eichel</option>
+          <option>Blatt</option>
+          <option>Herz</option>
+          <option>Schellen</option>
+        </select>
+
+        <select name="symbol">
+          <option>Ass</option>
+          <option>Zehn</option>
+          <option>König</option>
+          <option>Ober</option>
+          <option>Unter</option>
+          <option>Neun</option>
+          <option>Acht</option>
+          <option>Sieben</option>
+        </select>
+      </form>
+          
+    </section>
     
 
     <script src="kartenDetection.js"></script>
