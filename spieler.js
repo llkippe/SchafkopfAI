@@ -1,11 +1,20 @@
 class SPIELER{
-    constructor() {
-
+    constructor(name) {
+        this.name = name;
     }
 }
 
-class KISPIELER {
-    constructor() {
-        
+class KISPIELER extends SPIELER{
+    constructor(name) {
+        super(name)
+        this.karten = [];
+    }  
+
+    addKarteToKarten(farbe, symbol) {
+        this.karten.push(deck.getKarte(farbe,symbol));
+        console.log("Added: " + deck.convertToFullName(farbe,symbol));
+    }
+    addKartenFromButton() {
+        // hier adden infos bekommen von values...
     }
 }

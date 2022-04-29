@@ -41,7 +41,8 @@ function checkForDetectedCards() {
         }
 
         if(allSameCard) {
-          // add card too kispieler
+          spieler[KIpos].addKarteToKarten(firstFarbe, firstSymbol);
+          lastCards = [];
         }
     } 
 }

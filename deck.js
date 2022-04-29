@@ -15,10 +15,22 @@ class DECK{
             }
         }
     }
+    
+    getKarte(farbe, symbol) {  // gibt karte aus deck zurueck + removed diese + error Meldung falls nicht vorhanden
+        var index;
+        for(var i = 0; i < this.deck.length; i++) {
+            if(this.deck[i].farbe == farbe && this.deck[i].symbol == symbol) index = i;
+        }
+        if(index) { //KARTE ist vorhanden
+            var copy = this.deck[index];
+            this.deck.splice(index, 1);
+            return copy;
+        }
+    }
+
 
     convertToFullName(zeichen, farbe) {
         var name;
-      
         if(farbe == "e") name = "Eichel"
         if(farbe == "b") name = "Blatt"
         if(farbe == "h") name = "Herz"
@@ -33,7 +45,7 @@ class DECK{
         if(zeichen == '8') name+= "Acht"
         if(zeichen == '7') name+= "Sieben"
         return name;
-      }
+    }   
       
 }
 

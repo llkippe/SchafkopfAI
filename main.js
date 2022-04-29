@@ -7,4 +7,5 @@ canvas.height = 416;
 var deck = new DECK();
 
 var spieler = [];
+var KIpos;
 
