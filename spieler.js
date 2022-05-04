@@ -16,5 +16,6 @@ class KISPIELER extends SPIELER{
     }
     addKartenFromButton() {
         // hier adden infos bekommen von values...
+        //farbe = document.sel
     }
 }
