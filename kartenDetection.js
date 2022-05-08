@@ -64,7 +64,7 @@ function showPredictions() {
 
     
 
-    var anzeigeName = deck.convertToFullName(symbol,farbe) + "  " + parseInt(confidenceCards[i]*100) + "%";
+    var anzeigeName = deck.convertToFullName(farbe,symbol) + "  " + parseInt(confidenceCards[i]*100) + "%";
 
       if(farbe == "e") color = "#f2f22e"
       if(farbe == "b") color= "#10bd0d"

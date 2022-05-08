@@ -34,31 +34,33 @@
     
     <video id="webcam" class="removed"></video>
 
-    <section class="carddetection">
-      <canvas id="canvas" class="removed"></canvas>
+    <section class="carddetection removed">
+      <canvas id="canvas"></canvas>
       <form>
         <select name="farbe" id="selectFarbe">
-          <option>Eichel</option>
-          <option>Blatt</option>
-          <option>Herz</option>
-          <option>Schellen</option>
+          <option value="e">Eichel</option>
+          <option value="b">Blatt</option>
+          <option value="h">Herz</option>
+          <option value="s">Schellen</option>
         </select>
 
         <select name="symbol" id="selectSymbol">
-          <option>Ass</option>
-          <option>Zehn</option>
-          <option>König</option>
-          <option>Ober</option>
-          <option>Unter</option>
-          <option>Neun</option>
-          <option>Acht</option>
-          <option>Sieben</option>
+          <option value="A">Ass</option>
+          <option value="10">Zehn</option>
+          <option value="K">König</option>
+          <option value="O">Ober</option>
+          <option value="U">Unter</option>
+          <option value="9">Neun</option>
+          <option value="8">Acht</option>
+          <option value="7">Sieben</option>
         </select>
 
         <button type="button" onclick="spieler[KIpos].addKartenFromButton()">Add</button> 
       </form>
           
     </section>
+
+    <section class="spielwahl"></section>
     
 
     <script src="kartenDetection.js"></script>

@@ -1,10 +1,8 @@
-var currentState = selectSpieler;
+
 
 var selectSpieler = {
     stateName: "selectSpieler",
     nextState: function () {
-        currentState = getKIKarten;
-
         var selectSpieler = document.getElementsByClassName("selectSpieler")[0];
         selectSpieler.classList.add("removed");
         
@@ -27,8 +25,6 @@ var selectSpieler = {
             } else spieler.push(new SPIELER(spielerNamen[i]));
         }
         if(!KIvorhanden) alert("No KI Position! Refresh Window!");
-
-        console.log(spieler)
     },
     checkNames: function(event) {
         var spielerNamen = [];
@@ -64,7 +60,22 @@ var selectSpieler = {
 var getKIKarten = {
     stateName: "getKIKarten",
     start: function() {
-        canvas.classList.remove("removed");
+        var cardDetection = document.getElementsByClassName("carddetection")[0];
+        cardDetection.classList.remove("removed");
         enableCam();
+    },
+    nextState: function() {
+        var cardDetection = document.getElementsByClassName("carddetection")[0];
+        cardDetection.classList.add("removed");
+
+        spielwahl.start();
     }
 };
+
+var spielwahl = {
+    stateName: "spielwahl",
+    start: function() {
+        var spielWahl = document.getElementsByClassName("spielwahl")[0];
+        spielWahl.classList.remove("removed");
+    }
+}

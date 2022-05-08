@@ -17,34 +17,34 @@ class DECK{
     }
     
     getKarte(farbe, symbol) {  // gibt karte aus deck zurueck + removed diese + error Meldung falls nicht vorhanden
-        var index;
+        var index = -1;
         for(var i = 0; i < this.deck.length; i++) {
             if(this.deck[i].farbe == farbe && this.deck[i].symbol == symbol) index = i;
         }
-        if(index) { //KARTE ist vorhanden
+        if(index != -1) { //KARTE ist vorhanden
             var copy = this.deck[index];
-            console.log(copy)
+            console.log(this.deck[index]);
             this.deck.splice(index, 1);
             return copy;
         }
     }
 
 
-    convertToFullName(zeichen, farbe) {
+    convertToFullName(farbe, symbol) {
         var name;
         if(farbe == "e") name = "Eichel"
         if(farbe == "b") name = "Blatt"
         if(farbe == "h") name = "Herz"
         if(farbe == "s") name = "Schellen"
         name += " ";
-        if(zeichen == 'A') name+= "Ass"
-        if(zeichen == '10') name+= "Zehn"
-        if(zeichen == 'K') name+= "König"
-        if(zeichen == 'O') name+= "Ober"
-        if(zeichen == 'U') name+= "Unter"
-        if(zeichen == '9') name+= "Neun"
-        if(zeichen == '8') name+= "Acht"
-        if(zeichen == '7') name+= "Sieben"
+        if(symbol == 'A') name+= "Ass"
+        if(symbol == '10') name+= "Zehn"
+        if(symbol == 'K') name+= "König"
+        if(symbol == 'O') name+= "Ober"
+        if(symbol == 'U') name+= "Unter"
+        if(symbol == '9') name+= "Neun"
+        if(symbol == '8') name+= "Acht"
+        if(symbol == '7') name+= "Sieben"
         return name;
     }   
     
