@@ -11,11 +11,36 @@ class KISPIELER extends SPIELER{
     }  
 
     addKarteToKarten(farbe, symbol) {
-        this.karten.push(deck.getKarte(farbe,symbol));
-        console.log("Added: " + deck.convertToFullName(farbe,symbol));
+        var karte = deck.getKarte(farbe,symbol);
+        this.karten.push(karte);
+        console.log("Added: " + deck.convertToFullName(karte.farbe,karte.symbol));
     }
     addKartenFromButton() {
         // hier adden infos bekommen von values...
-        //farbe = document.sel
+        var farbeSelect = document.getElementById("selectFarbe").value;
+        var symbolSelect = document.getElementById("selectSymbol").value;
+
+        farbeSelect = farbeSelect.substring(0,1);
+        farbeSelect = farbeSelect.toLowerCase();
+
+        switch(symbolSelect) {
+            case "Zehn":
+                symbolSelect = "10";
+                break;
+            case "Neun":
+                symbolSelect = "9";
+                break;
+            case "Acht":
+                symbolSelect = "8";
+                break;
+            case "Sieben":
+                symbolSelect = "7";
+                break;
+            default:
+                symbolSelect = symbolSelect.substring(0,1);
+                break;
+        }
+
+        addKarteToKarten(farbeSelect, symbolSelect);
     }
 }

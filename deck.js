@@ -23,6 +23,7 @@ class DECK{
         }
         if(index) { //KARTE ist vorhanden
             var copy = this.deck[index];
+            console.log(copy)
             this.deck.splice(index, 1);
             return copy;
         }
@@ -46,7 +47,7 @@ class DECK{
         if(zeichen == '7') name+= "Sieben"
         return name;
     }   
-      
+    
 }
 
 
