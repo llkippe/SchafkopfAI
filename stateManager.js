@@ -77,5 +77,12 @@ var spielwahl = {
     start: function() {
         var spielWahl = document.getElementsByClassName("spielwahl")[0];
         spielWahl.classList.remove("removed");
+
+        var spielerSelect = document.getElementById("spielerSelect");
+
+        for(var i = 0; i < spieler.length; i++) {
+            if(i != KIpos) spielerSelect.options.add(new Option(spieler[i].name, i));
+        }
+        
     }
 }

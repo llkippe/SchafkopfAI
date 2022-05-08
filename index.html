@@ -55,12 +55,24 @@
           <option value="7">Sieben</option>
         </select>
 
-        <button type="button" onclick="spieler[KIpos].addKartenFromButton()">Add</button> 
-      </form>
-          
+        <button type="button" onclick="spieler[KIpos].addKartenFromButton()">Add</button>
+      </form> 
     </section>
 
-    <section class="spielwahl"></section>
+    <section class="spielwahl removed">
+      <form>
+        <select name="spieler" id="spielerSelect">
+        </select>
+
+        <select name="spielart" id="spielartSelect">
+          <option value="sauspiel">Sauspiel</option>
+          <option value="farbsolo">Farbsolo</option>
+          <option value="wenz">Wenz</option>
+        </select>
+
+        <button type="button" onclick="">KI Entscheidung</button>
+      </form>
+    </section>
     
 
     <script src="kartenDetection.js"></script>
