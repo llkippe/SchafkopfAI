@@ -26,4 +26,8 @@ class KISPIELER extends SPIELER{
         
         this.addKarteToKarten(farbeSelect, symbolSelect);
     }
+
+    KIEntscheidung() {
+        
+    }
 }

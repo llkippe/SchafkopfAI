@@ -83,6 +83,5 @@ var spielwahl = {
         for(var i = 0; i < spieler.length; i++) {
             if(i != KIpos) spielerSelect.options.add(new Option(spieler[i].name, i));
         }
-        
     }
 }
