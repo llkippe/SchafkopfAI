@@ -28,6 +28,13 @@ class DECK{
             return copy;
         }
     }
+    getRandomKarte() {
+        var index = Math.floor(Math.random() * this.deck.length);
+        var copy = this.deck[index];
+        console.log(this.deck[index]);
+        this.deck.splice(index, 1);
+        return copy;
+    }
 
 
     convertToFullName(farbe, symbol) {

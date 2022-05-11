@@ -3,6 +3,37 @@ class KARTE{
         this.farbe = farbe;
         this.symbol = symbol;
     }
+    
+
+    istKarte(farbe, symbol) {
+        if(this.farbe == farbe && this.symbol == symbol) return true;
+        else return false;
+    }
+
+    getKIScore() {
+        if (this.farbe == "e" || this.farbe == "b" || this.farbe == "s") { 
+          if (this.symbol==("7") || this.symbol==("8") || this.symbol==("9")) return 0;
+          if (this.symbol==("K") || this.symbol==("10")) return 2;
+          if (this.symbol==("A")) return 5;
+        }
+        if (this.farbe==("h")) {
+          if (this.symbol==("7") || this.symbol==("8") || this.symbol==("9") || this.symbol==("K")) return 3;
+          if (this.symbol==("10") || this.symbol==("A")) return 5;
+        }
+        if (this.symbol==("U")) {
+          if (this.farbe==("s")) return 6;
+          if (this.farbe==("h")) return 7;
+          if (this.farbe==("b")) return 8;
+          if (this.farbe==("e")) return 9;
+        }
+        if (this.symbol==("O")) {
+          if (this.farbe==("s")) return 10;
+          if (this.farbe==("h")) return 11;
+          if (this.farbe==("b")) return 12;
+          if (this.farbe==("e")) return 13;
+        }
+        return 0;
+    }
 
     convertToFullName() {
         var name;

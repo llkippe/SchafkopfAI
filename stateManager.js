@@ -60,9 +60,20 @@ var selectSpieler = {
 var getKIKarten = {
     stateName: "getKIKarten",
     start: function() {
-        var cardDetection = document.getElementsByClassName("carddetection")[0];
+
+        var cardDetection = document.getElementsByClassName("carddetection")[0]; //section
         cardDetection.classList.remove("removed");
-        enableCam();
+
+        if(document.getElementById("activatecameracheckbox").checked){ //checkbox true
+            enableCam();
+        }else{ // false --> remove canvas
+            canvas.classList.add("removed");
+        }
+        
+
+
+        
+        
     },
     nextState: function() {
         var cardDetection = document.getElementsByClassName("carddetection")[0];

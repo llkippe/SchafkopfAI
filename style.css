@@ -31,6 +31,24 @@ video {
   align-items: center;
 }
 
+#activatecamera {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  
+  gap: 10px;
+}
+#activatecamera input{
+  margin: 0;
+  padding: 0;
+
+  width: 25px;
+}
+#activatecamera p{
+  color: aliceblue;
+}
+
 .selectionContainer {
   height: 90vh;
   width: 700px;
