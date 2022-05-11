@@ -11,8 +11,3 @@ var deck = new DECK();
 
 var spieler = [];
 var KIpos;
-
-
-function KIEntscheidungButton() {
-    spieler[KIpos].KIEntscheidung();
-}

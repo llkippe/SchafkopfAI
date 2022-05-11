@@ -14,7 +14,7 @@
     <script src="deck.js"></script>
   </head>  
   <body>
-
+   
     <section class="selectSpieler">
       <div class="selectionContainer">
         <h2>Player Selection</h2>
@@ -33,13 +33,15 @@
         <input type="text" id="fourth" placeholder="name of player four" onchange="selectSpieler.checkNames(event)" value="KI">
 
         <button onclick="selectSpieler.nextState()">continue</button>
+        
       </div>
     </section>
 
     
     <video id="webcam" class="removed"></video>
-
+    
     <section class="carddetection removed">
+      
       <canvas id="canvas"></canvas>
       <form>
         <select name="farbe" id="selectFarbe">
@@ -62,22 +64,25 @@
 
         <button type="button" onclick="spieler[KIpos].addKartenFromButton()">Add</button>
         <button type="button" onclick="spieler[KIpos].addRandom()">Add Random</button>
+        
+       
       </form> 
     </section>
+    
 
     <section class="spielwahl removed">
-      <form>
-        <select name="spieler" id="spielerSelect">
-        </select>
+     
+      <select name="spieler" id="spielerSelect"></select>
 
-        <select name="spielart" id="spielartSelect">
+      <select name="spielart" id="spielartSelect">
           <option value="sauspiel">Sauspiel</option>
           <option value="farbsolo">Farbsolo</option>
           <option value="wenz">Wenz</option>
-        </select>
+      </select>
 
-        <button type="button" onclick="KIEntscheidungButton()">KI Entscheidung</button>
-      </form>
+      <button type="button" onclick="spieler[KIpos].KIEntscheidung()">KI Entscheidung</button>
+
+      <p id="answer">Keine Entscheidung</p>
     </section>
     
 

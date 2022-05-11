@@ -35,14 +35,30 @@ class KISPIELER extends SPIELER{
     }
 
     KIEntscheidung() {
-        console.log(this.calculateKIScore());
+        var score = this.calculateKIScore();
+        console.log(score);
+        if(score >= 5.5) document.getElementById("answer").innerHTML = "Spielt auf " + this.gibBesteRufFarbe();
+        else document.getElementById("answer").innerHTML = "Weiter";
     }
 
+    gibBesteRufFarbe() {
+        var farbe = ""; 
+        var anzahlEichel = this.anzahlVonFarbe("e"); 
+        var anzahlBlatt = this.anzahlVonFarbe("b"); 
+        var anzahlSchellen = this.anzahlVonFarbe("s"); 
+        if (this.karteInHand("e", "A")) anzahlEichel = 100; 
+        if (this.karteInHand("b", "A")) anzahlBlatt = 100; 
+        if (this.karteInHand("s", "A")) anzahlSchellen = 100;
+        if (anzahlEichel == 0) anzahlEichel = 100; 
+        if (anzahlBlatt == 0) anzahlBlatt = 100; 
+        if (anzahlSchellen == 0) anzahlSchellen = 100;
+        var minAnzahl = Math.min(anzahlEichel, anzahlBlatt, anzahlSchellen);
 
-    karteInHand(farbe, symbol) {
-        var karteInHand = false; 
-        for (let k of this.karten) if (k.istKarte(farbe, symbol)) karteInHand = true; 
-        return karteInHand;
+        if (minAnzahl == anzahlEichel) farbe = "e"; 
+        if (minAnzahl == anzahlBlatt) farbe = "b"; 
+        if (minAnzahl == anzahlSchellen) farbe = "s"; 
+        if (minAnzahl == 100) farbe = "gesperrt"; 
+        return farbe;
     }
 
     calculateKIScore() {
@@ -61,17 +77,21 @@ class KISPIELER extends SPIELER{
         if (this.anzahlVonFarbe("b") >= 3) score-= 5; 
         if (this.anzahlVonFarbe("s") >= 3) score-= 5; 
     
-        if (KIpos == 2) score+= 3; 
-        if (KIpos == 3) score+= 5; 
+        if (KIpos == 2) score+= 3;
+        if (KIpos == 3) score+= 5;
     
         if (this.anzahlSauspielTrumpf() < 4) score-= 12; 
+        else {
+            //boost wenn mehr als 2 ober
+            //weniger wenn 2 davon A und 10
+        }
         
         return score/8;
     }
     anzahlVonFarbe(farbe) {
         var anzahl = 0; 
         for (let k of this.karten) {
-            if (k.farbe == farbe && !k.symbol == "U" && !k.symbol == "O") anzahl++;
+            if (k.farbe == farbe && k.symbol != "U" && k.symbol != "O") anzahl++;
         }
         return anzahl;
       }
@@ -81,5 +101,10 @@ class KISPIELER extends SPIELER{
           if (k.symbol == "U" || k.symbol == "O" || k.farbe == "h") anzahl++;
         }
         return anzahl;
-    }   
+    }
+    karteInHand(farbe, symbol) {
+        var karteInHand = false; 
+        for (let k of this.karten) if (k.istKarte(farbe, symbol)) karteInHand = true; 
+        return karteInHand;
+    } 
 }
