@@ -72,8 +72,6 @@ var getKIKarten = {
         
 
 
-        
-        
     },
     nextState: function() {
         var cardDetection = document.getElementsByClassName("carddetection")[0];
@@ -92,7 +90,7 @@ var spielwahl = {
         var spielerSelect = document.getElementById("spielerSelect");
 
         for(var i = 0; i < spieler.length; i++) {
-            if(i != KIpos) spielerSelect.options.add(new Option(spieler[i].name, i));
+            spielerSelect.options.add(new Option(spieler[i].name, i));
         }
     }
 }
