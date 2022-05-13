@@ -13,7 +13,6 @@ class KISPIELER extends SPIELER{
 
 
 
-
     //
     //  Spielwahl
     //

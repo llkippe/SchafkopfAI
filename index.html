@@ -78,6 +78,7 @@
           <option value="sauspiel">Sauspiel</option>
           <option value="farbsolo">Farbsolo</option>
           <option value="wenz">Wenz</option>
+          <option value="ramsch">Ramsch</option>
       </select>
 
       <select name="farbe" id="spielwahlFarbeSelect">
@@ -85,12 +86,17 @@
         <option value="b">Blatt</option>
         <option value="h">Herz</option>
         <option value="s">Schellen</option>
-    </select>
+      </select>
 
       <button type="button" onclick="spieler[KIpos].KIEntscheidung()">KI Entscheidung</button>
-      <button type="button" onclick="">continue</button>
+      <button type="button" onclick="spielwahl.nextState()">continue</button>
 
       <p id="answer">Keine Entscheidung</p>
+
+    </section>
+
+    <section class="ingame removed">
+      <p>fucker</p>
     </section>
     
 

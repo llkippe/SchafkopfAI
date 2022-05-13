@@ -3,8 +3,8 @@
 var selectSpieler = {
     stateName: "selectSpieler",
     nextState: function () {
-        var selectSpieler = document.getElementsByClassName("selectSpieler")[0];
-        selectSpieler.classList.add("removed");
+
+        removeHtmlElementByClassName("selectSpieler")
         
         this.createSpieler();
         getKIKarten.start();
@@ -61,8 +61,7 @@ var getKIKarten = {
     stateName: "getKIKarten",
     start: function() {
 
-        var cardDetection = document.getElementsByClassName("carddetection")[0]; //section
-        cardDetection.classList.remove("removed");
+        addHtmlElementByClassName("carddetection");
 
         if(document.getElementById("activatecameracheckbox").checked){ //checkbox true
             enableCam();
@@ -74,9 +73,7 @@ var getKIKarten = {
 
     },
     nextState: function() {
-        var cardDetection = document.getElementsByClassName("carddetection")[0];
-        cardDetection.classList.add("removed");
-
+        removeHtmlElementByClassName("carddetection");
         spielwahl.start();
     }
 };
@@ -84,13 +81,70 @@ var getKIKarten = {
 var spielwahl = {
     stateName: "spielwahl",
     start: function() {
-        var spielWahl = document.getElementsByClassName("spielwahl")[0];
-        spielWahl.classList.remove("removed");
+        addHtmlElementByClassName("spielwahl");
 
         var spielerSelect = document.getElementById("spielerSelect");
-
         for(var i = 0; i < spieler.length; i++) {
             spielerSelect.options.add(new Option(spieler[i].name, i));
         }
+    },
+    nextState: function() {
+        removeHtmlElementByClassName("spielwahl");
+        ingame.start();
     }
+}
+
+var ingame = {
+    stateName: "ingame",
+    gamemode: "unknown",  // sauspiel, wenz, farbsolo, ramsch
+    trumpfart: "unknown", // e, h, b, s, U
+    saufarbe: "unknown",  // e, b, s
+    spielerAmZug: 0,      // 0 - 3
+
+    spielerPos: -1,       // 0 - 3
+    freundPos: {},        // int array 
+    start: function() {
+        addHtmlElementByClassName("ingame");
+        addHtmlElementByClassName("carddetection")
+
+        //set ingame variables
+        this.gamemode = document.getElementById("spielartSelect").value;
+
+        switch(this.gamemode) {
+            case "sauspiel":
+                this.trumpfart = "h";
+                this.saufarbe = document.getElementById("spielwahlFarbeSelect").value;
+                this.spielerPos = document.getElementById("spielerSelect").value; 
+                break;
+            case "farbsolo":
+                this.trumpfart = document.getElementById("spielwahlFarbeSelect").value;
+                this.spielerPos = document.getElementById("spielerSelect").value; 
+                break;
+            case "wenz":
+                this.trumpfart = "U";
+                this.spielerPos = document.getElementById("spielerSelect").value; 
+                break;
+            case "ramsch":
+                this.trumpfart = "h";
+                break;
+        }
+        
+    },
+    nextState: function() {
+        
+    }
+}
+
+
+//
+// generell purpose
+//
+
+function removeHtmlElementByClassName(classname) {
+    var element = document.getElementsByClassName(classname)[0];
+    element.classList.add("removed");
+}
+function addHtmlElementByClassName(classname) {
+    var element = document.getElementsByClassName(classname)[0];
+    element.classList.remove("removed");
 }
