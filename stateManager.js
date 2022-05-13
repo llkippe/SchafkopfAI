@@ -61,6 +61,7 @@ var getKIKarten = {
     stateName: "getKIKarten",
     start: function() {
 
+        addHtmlElementByClassName("ingameContainer");
         addHtmlElementByClassName("carddetection");
 
         if(document.getElementById("activatecameracheckbox").checked){ //checkbox true
