@@ -18,7 +18,7 @@ class KISPIELER extends SPIELER{
     //
     KIEntscheidung() {
         var score = this.calculateKIScore();
-        console.log(score);
+        console.log("KI Score bei " + score);
         if(score >= 5.5) {
             document.getElementById("answer").innerHTML = "Spielt auf " + this.gibBesteRufFarbe();
 
@@ -128,22 +128,11 @@ class KISPIELER extends SPIELER{
         var karte = deck.getKarte(farbe,symbol);
         if(karte) {
             this.karten.push(karte);
-            console.log("Added: " + deck.convertToFullName(karte.farbe,karte.symbol));
+            console.log("Added " + deck.convertToFullName(karte.farbe,karte.symbol) + " to karten");
 
             if(this.karten.length == 8) getKIKarten.nextState();
-        }else alert("Karte ist nicht mehr im Deck vorhanden");
-        
-    }
-    addKartenFromButton() {
-        var farbeSelect = document.getElementById("selectFarbe").value;
-        var symbolSelect = document.getElementById("selectSymbol").value;
-        
-        this.addKarteToKarten(farbeSelect, symbolSelect);
-    }
-    addRandom() {
-        var karte = deck.getRandomKarte();
-        this.karten.push(karte);
-        console.log("Added: " + deck.convertToFullName(karte.farbe,karte.symbol));
-        if(this.karten.length == 8) getKIKarten.nextState();
+        }else{
+            console.log("WARNING: Card couldn't be found")
+        }
     }
 }

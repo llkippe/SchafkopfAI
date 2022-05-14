@@ -1,6 +1,3 @@
-
-
-
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
@@ -11,3 +8,6 @@ var deck = new DECK();
 
 var spieler = [];
 var KIpos;
+
+
+

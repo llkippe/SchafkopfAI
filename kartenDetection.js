@@ -41,10 +41,32 @@ function checkForDetectedCards() {
         }
 
         if(allSameCard) {
-          spieler[KIpos].addKarteToKarten(firstFarbe, firstSymbol);
+          cardDetected(firstFarbe, firstSymbol);
           lastCards = [];
         }
     } 
+}
+
+function cardDetectedFromButton() {
+  var farbe = document.getElementById("selectFarbe").value;
+  var symbol = document.getElementById("selectSymbol").value;
+
+  cardDetected(farbe, symbol);
+}
+
+function cardDetectedRandom() {
+  var kartenInfos = deck.getRandomKarte();
+  cardDetected(kartenInfos[0], kartenInfos[1]);
+}
+
+function cardDetected(farbe, symbol) {
+  if(farbe && symbol) {
+    if(currentState.stateName == "getKIKarten") spieler[KIpos].addKarteToKarten(farbe, symbol);
+    else addKarteToStich(deck.getKarte(farbe, symbol), spieler[currentState.spielerAmZug]);
+  }else{
+    console.log("ERROR: no card input");
+  }
+  
 }
 
 function showPredictions() {

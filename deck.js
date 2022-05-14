@@ -2,11 +2,26 @@ class DECK{
     constructor(){
         this.deck = []
         this.farben = ["e", "b", "h", "s"]
-        this.symbole = ["A", "10", "K", "O", "U", "9", "8", "7"]   
+        this.symbole = ["A", "10", "K", "O", "U", "9", "8", "7"]
+        this.trumpfReihenfolge = [];
         
         this.addAllKarten();
     }   
 
+
+
+    createTrumpfReihenfolge() {
+        if(ingame.trumpfart == "U") {
+            for(var i = 0; i < this.farben.length; i++) this.trumpfReihenfolge.push(new KARTE(this.farben[i], "U"));
+        }else{
+            for(var i = 0; i < this.farben.length; i++) this.trumpfReihenfolge.push(new KARTE(this.farben[i], "O"));
+            for(var i = 0; i < this.farben.length; i++) this.trumpfReihenfolge.push(new KARTE(this.farben[i], "U"));
+
+            for(var i = 0; i < this.symbole.length; i++) {
+                if(this.symbole[i] != "U" && this.symbole[i] != "O") this.trumpfReihenfolge.push(new KARTE(ingame.trumpfart, this.symbole[i]));
+            }
+        }
+    }
 
     addAllKarten() {
         for(var i = 0; i < this.farben.length; i++) {
@@ -23,19 +38,17 @@ class DECK{
         }
         if(index != -1) { //KARTE ist vorhanden
             var copy = this.deck[index];
-            console.log(this.deck[index]);
             this.deck.splice(index, 1);
             return copy;
         }
     }
     getRandomKarte() {
         var index = Math.floor(Math.random() * this.deck.length);
-        var copy = this.deck[index];
-        console.log(this.deck[index]);
-        this.deck.splice(index, 1);
-        return copy;
+        var farbe = this.deck[index].farbe
+        var symbol = this.deck[index].symbol;
+        var returnArr = [farbe, symbol]; 
+        return returnArr;
     }
-
 
     convertToFullName(farbe, symbol) {
         var name;

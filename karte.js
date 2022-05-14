@@ -2,8 +2,30 @@ class KARTE{
     constructor(farbe, symbol) {
         this.farbe = farbe;
         this.symbol = symbol;
+        this.punkte = this.calcPunkte();
     }
     
+    istTrumpf() {
+      if(ingame.trumpfart != "unknown") {
+        if(ingame.trumpfart == "U"){
+          if(this.symbol == "U") return true;
+          else return false;
+        }else{
+          if(this.symbol == "U" || this.symbol == "O") return true;
+          if(this.farbe == ingame.trumpfart) return true;
+          return false;
+        }
+      }
+    }
+
+    getTrumpfHoehe() {
+      for(var i = 0; i < deck.trumpfReihenfolge.length; i++) if(deck.trumpfReihenfolge[i].istKarte(this.farbe, this.symbol)) return i;
+      return 100;
+    }
+
+    getFarbKartenHoehe() {
+      for(var i = 0; i < deck.symbole.length; i++) if(this.symbol == deck.symbole[i]) return i; //!!! care O U sind eingereiht !!!
+    }
 
     istKarte(farbe, symbol) {
         if(this.farbe == farbe && this.symbol == symbol) return true;
@@ -33,6 +55,15 @@ class KARTE{
           if (this.farbe==("e")) return 13;
         }
         return 0;
+    }
+
+    calcPunkte() {
+      if(this.symbol == "A") return 11;
+      if(this.symbol == "10") return 10;
+      if(this.symbol == "K") return 4;
+      if(this.symbol == "O") return 3;
+      if(this.symbol == "U") return 2;
+      if(this.symbol == "9" || this.symbol == "8" || this.symbol == "7") return 0;
     }
 
     convertToFullName() {

@@ -1,4 +1,4 @@
-
+var currentState = selectSpieler;
 
 var selectSpieler = {
     stateName: "selectSpieler",
@@ -23,6 +23,7 @@ var selectSpieler = {
                 KIpos = i;
                 KIvorhanden = true;
             } else spieler.push(new SPIELER(spielerNamen[i]));
+            console.log("added " + spieler[i].name)
         }
         if(!KIvorhanden) alert("No KI Position! Refresh Window!");
     },
@@ -60,7 +61,8 @@ var selectSpieler = {
 var getKIKarten = {
     stateName: "getKIKarten",
     start: function() {
-
+        currentState = getKIKarten;
+        
         addHtmlElementByClassName("ingameContainer");
         addHtmlElementByClassName("carddetection");
 
@@ -69,9 +71,6 @@ var getKIKarten = {
         }else{ // false --> remove canvas
             canvas.classList.add("removed");
         }
-        
-
-
     },
     nextState: function() {
         removeHtmlElementByClassName("carddetection");
@@ -82,6 +81,8 @@ var getKIKarten = {
 var spielwahl = {
     stateName: "spielwahl",
     start: function() {
+        currentState = spielwahl;
+
         addHtmlElementByClassName("spielwahl");
 
         var spielerSelect = document.getElementById("spielerSelect");
@@ -105,6 +106,8 @@ var ingame = {
     spielerPos: -1,       // 0 - 3
     freundPos: {},        // int array 
     start: function() {
+        currentState = ingame;
+
         addHtmlElementByClassName("ingame");
         addHtmlElementByClassName("carddetection")
 
@@ -129,6 +132,10 @@ var ingame = {
                 this.trumpfart = "h";
                 break;
         }
+
+        console.log("New Game: " + this.gamemode + " von " + spieler[this.spielerPos].name + " auf " + this.saufarbe + "; Trump: " + this.trumpfart);
+
+        deck.createTrumpfReihenfolge();
         
     },
     nextState: function() {
