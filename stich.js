@@ -23,6 +23,9 @@ function addKarteToStich(karte, spieler) {
         stich.push(karte);
         karteVonSpieler.push(spieler);
 
+        document.getElementById("card" + stich.length).style.backgroundImage = "url(019.png)";
+        document.getElementById("card" + stich.length).style.border = "none";
+
         if(stich.length == 4) resetStich();
     }else{
         console.log("WARNING: Card couldn't be found")
