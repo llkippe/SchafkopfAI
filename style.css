@@ -164,12 +164,6 @@ input::placeholder{
 
   background-color: rgba(0, 0, 0, 0.014);
   border: #38383833 solid 1px;
-  
-  
-
-  /*background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='25' ry='25' stroke='black' stroke-width='5' stroke-dasharray='14%2c 8' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
-  border-radius: 25px;
-  */
 }
 
 
@@ -200,6 +194,41 @@ input::placeholder{
   right: calc(26% + 20px);
 
   z-index: 4;
+}
+
+.ingameContainer .ingame .cardInformation {
+  position: absolute;
+
+  font-size: 26px;
+}
+
+.ingameContainer .ingame #info1 {
+  z-index: 50;
+  top: calc(50vh - 133px);
+  right: calc(26% - 175px);
+  text-align: end;
+  width: 300px;
+}
+.ingameContainer .ingame #info2 {
+  z-index: 50;
+  top: calc(50vh + 265px);
+  right: calc(26% - 36px);
+  text-align: center;
+  width: 200px;
+}
+.ingameContainer .ingame #info3 {
+  z-index: 50;
+  top: calc(50vh + 108px);
+  right: calc(26% + 41px);
+  text-align: start;
+  width: 300px;
+}
+.ingameContainer .ingame #info4 {
+  z-index: 50;
+  top: calc(50vh - 288px);
+  right: calc(26% + 5px);
+  text-align: center;
+  width: 200px;
 }
 
 

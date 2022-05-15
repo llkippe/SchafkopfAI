@@ -138,6 +138,12 @@ var ingame = {
         deck.createTrumpfReihenfolge();
         
     },
+    naechsterZug: function() {
+        this.spielerAmZug++;
+        if(this.spielerAmZug == 4) this.spielerAmZug = 0;
+        
+    },
+
     nextState: function() {
         
     }

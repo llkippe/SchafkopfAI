@@ -1,6 +1,13 @@
 class SPIELER{
     constructor(name) {
         this.name = name;
+        this.punkte = 0;
+    }
+
+    updatePunkte(addPunkte) {
+        this.punkte += addPunkte;
+        console.log(this.name + " hat nun " + this.punkte + " Punkte");
+        //update grafik
     }
 }
 
