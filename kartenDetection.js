@@ -112,28 +112,18 @@ function showPredictions() {
     }
   window.requestAnimationFrame(showPredictions);
 }
-function predict() {
-  const tfimg = tf.browser.fromPixels(video)
-  const resized = tf.image.resizeBilinear(tfimg, [640,640]).div(tf.scalar(255))
-  const casted = tf.cast(resized, dtype = 'float32');
-  const expandedimg = resized.transpose([0,1,2]).expandDims();
-
-  model.executeAsync(expandedimg).then(async function (predictions) {
-    const boxes = await predictions[0].data();
-    const scores = await predictions[1].data();
-    const classes = await predictions[2].data();
-
-    saveRectData(boxes, classes, scores);
-
-    tf.dispose(tfimg)
-    tf.dispose(resized)
-    tf.dispose(casted)
-    tf.dispose(expandedimg)
-
-
-    predict();
-  });
-}
+async function predict() {
+  tf.engine().startScope()
+  const img = tf.image.resizeBilinear(tf.browser.fromPixels(video), [640,640]).div(tf.scalar(255)).transpose([0, 1, 2]).expandDims();
+  predictions = await model.executeAsync(img); 
+  const boxes = await predictions[0].data();
+  const scores = await predictions[1].data();
+  const classes = await predictions[2].data();
+  saveRectData(boxes, classes, scores);
+  tf.engine().endScope()
+  
+  predict();
+};
 function saveRectData(boxes,classes,scores) {
   xBoxes = [];
   yBoxes = [];
