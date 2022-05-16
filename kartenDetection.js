@@ -4,6 +4,8 @@ const labelMap = ["b10", "e10", "h10", "s10", "b7", "e7", "h7", "s7", "b8", "e8"
 
 var minThreshold = 0.70;
 
+var pcModel = false;
+
 var xBoxes = [];
 var yBoxes = [];
 var widthBoxes = [];
@@ -14,14 +16,11 @@ var nameCards = [];
 var lastCards = [];
 
 
-tf.setBackend('webgl');
-tf.ready().then(() => {
-  loadModel();
-});
+loadModel();
 
 
 loadModel().then(function () {
-    //enableCam();
+    console.log("loaded Model")
 });
 
 
@@ -115,9 +114,9 @@ function showPredictions() {
 }
 function predict() {
   const tfimg = tf.browser.fromPixels(video)
-  const resized = tf.image.resizeBilinear(tfimg, [416,416]).div(tf.scalar(255))
+  const resized = tf.image.resizeBilinear(tfimg, [640,640]).div(tf.scalar(255))
   const casted = tf.cast(resized, dtype = 'float32');
-  const expandedimg = casted.transpose([0,1,2]).expandDims();
+  const expandedimg = resized.transpose([0,1,2]).expandDims();
 
   model.executeAsync(expandedimg).then(async function (predictions) {
     const boxes = await predictions[0].data();
@@ -131,7 +130,8 @@ function predict() {
     tf.dispose(casted)
     tf.dispose(expandedimg)
 
-    window.requestAnimationFrame(predict);
+
+    predict();
   });
 }
 function saveRectData(boxes,classes,scores) {
@@ -165,7 +165,10 @@ function saveRectData(boxes,classes,scores) {
 }
 async function loadModel() {
     try {
-      model = await tf.loadGraphModel('https://raw.githubusercontent.com/llkippe/SchafkopfAI/main/fullDeckV2_web_model/model.json');
+      if(pcModel) model = await tf.loadGraphModel('https://raw.githubusercontent.com/llkippe/SchafkopfAI/main/fullDeckV2_web_model/model.json');
+      else {
+        model = await tf.loadGraphModel('https://raw.githubusercontent.com/llkippe/SchafkopfAI/main/bestYoloNCh2_web_model/model.json');
+      }
     } catch(e) {
       console.log(e);
     } 
@@ -188,6 +191,9 @@ function enableCam(event) {
       ctx.beginPath()
       ctx.fillText("loading model...", canvas.width/2, canvas.height/2);
       ctx.stroke();
+      while(!model){
+
+      }
       enableCam();
     }
 
