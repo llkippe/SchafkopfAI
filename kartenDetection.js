@@ -157,7 +157,7 @@ async function loadModel() {
     try {
       if(pcModel) model = await tf.loadGraphModel('https://raw.githubusercontent.com/llkippe/SchafkopfAI/main/fullDeckV2_web_model/model.json');
       else {
-        model = await tf.loadGraphModel('https://raw.githubusercontent.com/llkippe/SchafkopfAI/main/bestYoloNCh2_web_model/model.json');
+        model = await tf.loadGraphModel('https://raw.githubusercontent.com/llkippe/SchafkopfAI/main/yolov5n_web_model/model.json');
       }
     } catch(e) {
       console.log(e);
