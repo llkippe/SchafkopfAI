@@ -113,15 +113,18 @@ function showPredictions() {
   window.requestAnimationFrame(showPredictions);
 }
 async function predict() {
+  const start = Date.now();
+  var millis;
+  console.log('starting timer...');
   tf.engine().startScope()
+  
   const img = tf.image.resizeBilinear(tf.browser.fromPixels(video), [640,640]).div(tf.scalar(255)).transpose([0, 1, 2]).expandDims();
-  predictions = await model.executeAsync(img); 
+  predictions = await model.executeAsync(img);
   const boxes = await predictions[0].data();
   const scores = await predictions[1].data();
   const classes = await predictions[2].data();
   saveRectData(boxes, classes, scores);
   tf.engine().endScope()
-  
   predict();
 };
 function saveRectData(boxes,classes,scores) {
