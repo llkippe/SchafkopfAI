@@ -141,7 +141,7 @@ var ingame = {
     naechsterZug: function() {
         this.spielerAmZug++;
         if(this.spielerAmZug == 4) this.spielerAmZug = 0;
-        
+        if(this.spielerAmZug == KIpos) spieler[KIpos].playCard();
     },
 
     nextState: function() {

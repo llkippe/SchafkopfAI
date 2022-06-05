@@ -17,9 +17,9 @@ var karteVonSpieler = [];
 var runde = 1;
 
 function addKarteToStich(karte, spieler) {
+    console.log("nein")
     if(karte) {
-        currentState.naechsterZug();
-
+        
         stich.push(karte);
         karteVonSpieler.push(spieler);
 
@@ -29,6 +29,7 @@ function addKarteToStich(karte, spieler) {
         document.getElementById("card" + stich.length).style.border = "none";
         document.getElementById("info" + stich.length).innerHTML = karteVonSpieler[karteVonSpieler.length-1].name;
         if(stich.length == 4) resetStich();
+        currentState.naechsterZug();
     }else{
         console.log("WARNING: Card couldn't be found")
     }
@@ -64,6 +65,7 @@ function sleep(ms) {
 }
 
 function endOfGame() {
+    console.log("Game Ended")
     //Auswertung
 
     //Reset Variablen

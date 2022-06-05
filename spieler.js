@@ -18,6 +18,13 @@ class KISPIELER extends SPIELER{
     }
 
 
+    //
+    // playCard
+    //
+    playCard() {
+        var index = Math.floor(Math.random() * this.karten.length);
+        addKarteToStich(this.karten[index], this);
+    }
 
 
     //
