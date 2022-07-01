@@ -15,6 +15,7 @@ class KISPIELER extends SPIELER{
     constructor(name) {
         super(name)
         this.karten = [];
+        this.validCards = [];
     }
 
 
@@ -22,10 +23,86 @@ class KISPIELER extends SPIELER{
     // playCard
     //
     playCard() {
+        var karteGespielt = false;
+
+        this.validCards = [];
+        for(let k of this.karten) this.validCards.add(k);
+
+        if (stich.length == 0) {
+            console.log("Erster Spieler");
+            if (istSpieler) {
+                console.log("ist Spieler");
+                //spieleKarteErsterSpieler();
+            } else {
+                console.log("ist nicht Spieler");
+                //spieleKarteErsterNichtSpieler();
+            }
+        }else{
+            if(stich[0].istTrumpf()) {
+                console.log("Trumpf angespielt");
+                
+            }else{
+                console.log(stich[0].farbe + " angespielt");
+
+            }
+        }
+
         var index = Math.floor(Math.random() * this.karten.length);
         addKarteToStich(this.karten[index], this);
     }
 
+    /*
+    playCard() {
+        var karteGespielt = false;
+
+        this.validCards = [];
+        for(let k of this.karten) this.validCards.add(k);
+
+        if (stich.length == 0) {
+        console.log("Erster Spieler");
+        if (istSpieler) {
+            console.log("ist Spieler");
+            spieleKarteErsterSpieler();
+        } else {
+            console.log("ist nicht Spieler");
+            spieleKarteErsterNichtSpieler();
+        }
+        } else {
+        console.log("Nicht erster Spieler");
+        if (istFrei(ersteFarbe)) {
+            console.log("ist frei");
+            if (ersteFarbe.equals("trumpf")) {
+            console.log("Trumpf angespielt");
+            spieleKarteFreiTrumpf();
+            } else {
+            console.log(ersteFarbe + " angespielt");
+            spieleKarteFreiFarbe();
+            }
+        } else {
+            console.log("ist nicht frei");
+            farbeZugeben(ersteFarbe);
+            showKarten();
+            if (erlaubteKarten.size() > 1) {
+            if (ersteFarbe.equals("trumpf")) {
+                console.log("Trumpf angespielt");
+                spieleKarteNichtFreiTrumpf();
+            } else {
+                console.log(ersteFarbe + " angespielt");
+                spieleKarteNichtFreiFarbe();
+            }
+            } else {
+            console.log("nur eine erlaubte Karte");
+            addKarteToStapel(erlaubteKarten.get(0).name, erlaubteKarten.get(0).farbe, "nur eine erlaubte uebrig");
+            }
+        }
+        }
+        if (!karteGespielt) {
+        int randomKarte = int(random(0, erlaubteKarten.size()));
+        KARTE karte = erlaubteKarten.get(randomKarte);
+        addKarteToStapel(karte.name, karte.farbe, "random Karte");
+        }
+    }
+    */
 
     //
     //  Spielwahl
