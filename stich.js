@@ -1,13 +1,9 @@
-/* repraesentation 4 Karten
-    hinzufuegen max 4
-    wenn voll stich auswerten wenn 8. runde gewinner verlierer
-    count von runden
-    hoechstenKarte in stich --> return KARTE boolean (turmp oder nicht)
-    punkteInStich
-    spielerReferenz zu jeder Karte
+/* 
+    karteVonSpieler fuer jeden Stich im voraus erstellen
+    updateSpielerAmZug nach Stich
+    update Namen nach Stich
 
-    freundDavor??
-    spielerDavor??
+    dann weiter bei KI....
 */
 
 
@@ -17,17 +13,18 @@ var karteVonSpieler = [];
 var runde = 1;
 
 function addKarteToStich(karte, spieler) {
-    console.log("nein")
     if(karte) {
-        
         stich.push(karte);
         karteVonSpieler.push(spieler);
+
+        if(karte.istKarte(ingame.saufarbe, "A")) spieler.istFreund = true;
 
         console.log("Added " + deck.convertToFullName(karte.farbe, karte.symbol) + " to Stich (" + punkteInStich() + " Punkte im Stich)");
 
         document.getElementById("card" + stich.length).style.backgroundImage = "url(Cards/"+ karte.farbe + karte.symbol +".png)";
         document.getElementById("card" + stich.length).style.border = "none";
         document.getElementById("info" + stich.length).innerHTML = karteVonSpieler[karteVonSpieler.length-1].name;
+
         if(stich.length == 4) resetStich();
         currentState.naechsterZug();
     }else{
@@ -86,7 +83,7 @@ function hoechstenTrumpfInStich() {
         position: 0,
         istTrumpf: true
     }
-    for(var i = 0; i < stich.length; i++) if(stich[i].getTrumpfHoehe() < rueckgabe.karte.getTrumpfHoehe()) {
+    for(var i = 0; i < stich.length; i++) if(stich[i].getTrumpfHoehe(true) < rueckgabe.karte.getTrumpfHoehe(true)) {
         rueckgabe.karte = stich[i];
         rueckgabe.position = i;
     }

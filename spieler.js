@@ -2,6 +2,7 @@ class SPIELER{
     constructor(name) {
         this.name = name;
         this.punkte = 0;
+        this.istFreund = false;
     }
 
     updatePunkte(addPunkte) {
@@ -26,83 +27,214 @@ class KISPIELER extends SPIELER{
         var karteGespielt = false;
 
         this.validCards = [];
-        for(let k of this.karten) this.validCards.add(k);
+        for(let k of this.karten) this.validCards.push(k);
 
         if (stich.length == 0) {
             console.log("Erster Spieler");
             if (istSpieler) {
                 console.log("ist Spieler");
-                //spieleKarteErsterSpieler();
+                this.spieleRandomKarte();
             } else {
                 console.log("ist nicht Spieler");
-                //spieleKarteErsterNichtSpieler();
+                this.spieleRandomKarte();
             }
         }else{
             if(stich[0].istTrumpf()) {
                 console.log("Trumpf angespielt");
-                
+                if(this.trumpfVorhanden()) {
+                    console.log("Zugeben");
+                    this.trumpfZugeben();
+
+                    this.trumpfNichtFrei();
+                }else{
+                    console.log("Ist Frei");
+
+                    this.trumpfFrei();
+                }
             }else{
                 console.log(stich[0].farbe + " angespielt");
 
+                if(this.farbeVorhanden(stich[0].farbe)) {
+                    console.log("Zugeben");
+                    this.farbeZugeben();
+
+                    this.spieleRandomKarte();
+                }else{
+                    console.log("Ist Frei");
+
+                    this.spieleRandomKarte();
+                }
             }
         }
 
-        var index = Math.floor(Math.random() * this.karten.length);
+    }
+
+    /// Nicht Erster Spieler
+    ///
+        /// Trumpf
+        ///
+        trumpfNichtFrei(){
+            this.trumpfAbspatzen("keine Gute Möglichkeit gefunden");
+        }
+
+        /*
+        void spieleKarteNichtFreiTrumpf() {
+    if (stapel.kartenInStapel() == 3 && stichGehoertUns()) {
+      println("letzter und Stich gehoert uns");
+      trumpfSchmieren();
+      return;
+    }
+    if (!stichGehoertUns() && int(stapel.stechenderTrumpf()[3]) < int(deck.hoechsterTrumpfInDeck()[3]) && !hoehererTrumpfInErlaubtenKartenAlsStapel()) {
+      println("Gegner hat hoechsten Trumpf gelegt");
+      trumpfAbspatzen();
+      return;
+    }
+    if (getFreundPos() == int(stapel.stechenderTrumpf()[2]) && int(stapel.stechenderTrumpf()[3]) < int(deck.hoechsterTrumpfInDeck()[3])) {
+      println("Freund hat hoechsten Trumpf gelegt");
+      trumpfSchmieren();
+      return;
+    }
+    if (stapel.punkteInStapel() >= 10 && hoehererTrumpfInErlaubtenKartenAlsStapel()) { // und mein trumpf hoeher als akutell hoechster trumpf
+      println("merh als 10 in Stapel und mein trumpf hoeher als akutell hoechster trumpf");
+      if (stapel.kartenInStapel() == 3) addKarteToStapel(ersterTrumpfInErlaubtenKartenUeber(int(stapel.stechenderTrumpf()[3]))[0], ersterTrumpfInErlaubtenKartenUeber(int(stapel.stechenderTrumpf()[3]))[1], "Über 10 Punkte also stechen");
+      else addKarteToStapel(hoechsterTrumpfInErlaubtenKarten()[0], hoechsterTrumpfInErlaubtenKarten()[1], "Über 10 Punkte also hoechster Trumpf");
+      return;
+    }
+    if (stapel.kartenInStapel() == 2 && getFreundPos() == stapel.gibLetztePosition()) {
+      println("KI auf vorletzen Platz und Freund auf letzter");
+      if (hoehererTrumpfInErlaubtenKartenAlsStapel() && stapel.trumpfInStapel()) {
+        addKarteToStapel(ersterTrumpfInErlaubtenKartenUeber(int(stapel.stechenderTrumpf()[3]))[0], ersterTrumpfInErlaubtenKartenUeber(int(stapel.stechenderTrumpf()[3]))[1], "KI ist vorletzter und Freund letzter");
+      } else {
+        println("KI is vorletzter und Freundn lezter aber kein hoch genuger Trumpf");
+        trumpfAbspatzen();
+      }
+      return;
+    }
+    if (getFreundPos() == getSpielerPos() && getFreundPos() == stapel.gibLetztePosition() && spieler[getSpielerPos()].hatTrumpf) {
+      println("Spielerfreund an letzter Stelle");
+      trumpfSchmieren();
+      return;
+    }
+    if (getFreundPos() != -1) {
+      if (stapel.stapel[getFreundPos()] != null) {
+        if (stapel.stapel[getFreundPos()].name.equals("o")) {
+          println("Freund hat ober gelegt");
+          trumpfAbspatzen();
+          return;
+        }
+      }
+    }
+    println("keine gute Moeglichkeit gefunden");
+    trumpfAbspatzen();
+    }
+        */
+
+
+
+        trumpfFrei(){
+            this.trumpfAbspatzen("trumpf frei")
+        }
+        
+        /// Nicht Trumpf
+        ///
+
+    /// Info Spielstate
+    ///
+    
+    gehoertUns() {
+        if(karteVonSpieler[hoechsteKarteInStich().position] == this || karteVonSpieler[hoechsteKarteInStich().position].istFreund) return true;
+        else return false;
+    }
+    
+
+    /// Change validCards
+    ///
+    trumpfZugeben() {
+        for(var i = this.validCards.length-1; i >= 0; i--) {
+            var k = this.validCards[i];
+            if(!k.istTrumpf()) this.entferneValidCard(k.farbe, k.symbol);
+        }
+    }
+    farbeZugeben() {
+        for(var i = this.validCards.length-1; i >= 0; i--) {
+            var k = this.validCards[i];
+            if(k.istTrumpf() || k.farbe != stich[0].farbe) this.entferneValidCard(k.farbe, k.symbol);
+        }
+    }
+
+    entferneValidCard(farbe, symbol) {
+        var index = -1;
+        for(var i = 0; i < this.validCards.length; i++) if(this.validCards[i].farbe == farbe && this.validCards[i].symbol == symbol) index = i;
+        if(index != -1) this.validCards.splice(index, 1);
+        else console.log(`Karte: ${farbe} ${symbol} konnte nicht gefunden werden (bei entferneValidCard)`);
+    }
+
+
+    /// Info validCards
+    ///
+    trumpfVorhanden() {
+        var trumpfVorhanden = false;
+        for(let k of this.validCards) {
+            if(k.istTrumpf()) trumpfVorhanden = true;
+        }
+        return trumpfVorhanden;
+    }
+    farbeVorhanden(farbe) {
+        var farbeVorhanden = false;
+        for(let k of this.validCards) {
+            if(k.farbe == farbe && !k.istTrumpf()) farbeVorhanden = true;
+        }
+        return farbeVorhanden;
+    }
+    karteInValidCards(farbe, symbol) {
+        var karteInValidCards = false; 
+        for (let k of this.validCards) if (k.istKarte(farbe, symbol)) karteInValidCards = true; 
+        return karteInValidCards;
+    }
+
+    ///
+    /// spieleKarten
+    ///
+
+    trumpfAbspatzen(grund) {
+        console.log("trumpfAbspatzen" + grund)
+
+        var niedrigsteKarte = new KARTE("t", "t"); // t for Test
+        console.log(niedrigsteKarte.getTrumpfHoehe(false));
+
+        for(let k of this.validCards) {
+            if(k.getTrumpfHoehe(false) > niedrigsteKarte.getTrumpfHoehe(false) && !k.istKarte("h", "A") && !k.istKarte("h", "10")) {
+                niedrigsteKarte = k;
+            }
+        }
+
+        if(niedrigsteKarte.symbol == "t") { // keine gefunden
+            if(this.karteInValidCards("h", "A")) niedrigsteKarte = new KARTE("h", "A");
+            if(this.karteInValidCards("h", "10")) niedrigsteKarte = new KARTE("h", "10");
+        }
+
+        if(niedrigsteKarte.symbol =="t") console.log("abspatzen")
+        else this.spieleKarte(niedrigsteKarte.farbe, niedrigsteKarte.symbol, grund);
+    }
+
+    spieleRandomKarte() {
+        var index = Math.floor(Math.random() * this.validCards.length);
+        this.spieleKarte(this.validCards[index].farbe, this.validCards[index].symbol, "Keine Möglichkeit gefunden: random");
+    }
+
+    spieleKarte(farbe, symbol, grund) {
+        console.log(grund);
+        var index = -1;
+        for(var i = 0; i < this.karten.length; i++) if(this.karten[i].farbe == farbe && this.karten[i].symbol == symbol) index = i;
         addKarteToStich(this.karten[index], this);
+        if(index != -1) this.karten.splice(index, 1);
     }
 
-    /*
-    playCard() {
-        var karteGespielt = false;
 
-        this.validCards = [];
-        for(let k of this.karten) this.validCards.add(k);
 
-        if (stich.length == 0) {
-        console.log("Erster Spieler");
-        if (istSpieler) {
-            console.log("ist Spieler");
-            spieleKarteErsterSpieler();
-        } else {
-            console.log("ist nicht Spieler");
-            spieleKarteErsterNichtSpieler();
-        }
-        } else {
-        console.log("Nicht erster Spieler");
-        if (istFrei(ersteFarbe)) {
-            console.log("ist frei");
-            if (ersteFarbe.equals("trumpf")) {
-            console.log("Trumpf angespielt");
-            spieleKarteFreiTrumpf();
-            } else {
-            console.log(ersteFarbe + " angespielt");
-            spieleKarteFreiFarbe();
-            }
-        } else {
-            console.log("ist nicht frei");
-            farbeZugeben(ersteFarbe);
-            showKarten();
-            if (erlaubteKarten.size() > 1) {
-            if (ersteFarbe.equals("trumpf")) {
-                console.log("Trumpf angespielt");
-                spieleKarteNichtFreiTrumpf();
-            } else {
-                console.log(ersteFarbe + " angespielt");
-                spieleKarteNichtFreiFarbe();
-            }
-            } else {
-            console.log("nur eine erlaubte Karte");
-            addKarteToStapel(erlaubteKarten.get(0).name, erlaubteKarten.get(0).farbe, "nur eine erlaubte uebrig");
-            }
-        }
-        }
-        if (!karteGespielt) {
-        int randomKarte = int(random(0, erlaubteKarten.size()));
-        KARTE karte = erlaubteKarten.get(randomKarte);
-        addKarteToStapel(karte.name, karte.farbe, "random Karte");
-        }
-    }
-    */
+
+
+
 
     //
     //  Spielwahl

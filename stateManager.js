@@ -104,7 +104,6 @@ var ingame = {
     spielerAmZug: 0,      // 0 - 3
 
     spielerPos: -1,       // 0 - 3
-    freundPos: {},        // int array 
     start: function() {
         currentState = ingame;
 

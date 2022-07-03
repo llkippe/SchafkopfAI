@@ -18,9 +18,10 @@ class KARTE{
     }
   }
 
-  getTrumpfHoehe() {
+  getTrumpfHoehe(sucheHoechste) {
     for(var i = 0; i < deck.trumpfReihenfolge.length; i++) if(deck.trumpfReihenfolge[i].istKarte(this.farbe, this.symbol)) return i;
-    return 100;
+    if(sucheHoechste) return 100;
+    else return -100;
   }
 
   getFarbKartenHoehe() {
