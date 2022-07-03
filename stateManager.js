@@ -134,6 +134,11 @@ var ingame = {
 
         console.log("New Game: " + this.gamemode + " von " + spieler[this.spielerPos].name + " auf " + this.saufarbe + "; Trump: " + this.trumpfart);
 
+        for(var i = 0; i < 4; i++) {
+            karteVonSpieler.push(spieler[i]);
+            document.getElementById(`info${i+1}`).innerHTML = karteVonSpieler[i].name;
+        }
+
         deck.createTrumpfReihenfolge();
         
     },
@@ -141,6 +146,10 @@ var ingame = {
         this.spielerAmZug++;
         if(this.spielerAmZug == 4) this.spielerAmZug = 0;
         if(this.spielerAmZug == KIpos) spieler[KIpos].playCard();
+    },
+
+    setZugPosition: function(player) {
+        for(var i = 0; i < 4; i++) if(spieler[i] == player) this.spielerAmZug = i;
     },
 
     nextState: function() {

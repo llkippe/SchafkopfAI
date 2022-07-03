@@ -24,8 +24,10 @@ class KARTE{
     else return -100;
   }
 
-  getFarbKartenHoehe() {
+  getFarbKartenHoehe(sucheHoechste) {
     for(var i = 0; i < deck.symbole.length; i++) if(this.symbol == deck.symbole[i]) return i; //!!! care O U sind eingereiht !!!
+    if(sucheHoechste) return 100;
+    else return -100;
   }
 
   istKarte(farbe, symbol) {

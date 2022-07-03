@@ -1,3 +1,11 @@
+/*
+    - normales Abspatzen, damit nicht keine Karte gespielt werden kann
+    - dann checken ob stich alles funktioniert
+    - 
+    
+
+*/
+
 class SPIELER{
     constructor(name) {
         this.name = name;
@@ -24,14 +32,14 @@ class KISPIELER extends SPIELER{
     // playCard
     //
     playCard() {
-        var karteGespielt = false;
+        console.log("!!START KARTEN SUCHE!!")
 
         this.validCards = [];
         for(let k of this.karten) this.validCards.push(k);
 
         if (stich.length == 0) {
             console.log("Erster Spieler");
-            if (istSpieler) {
+            if (KIpos == ingame.spielerPos) {
                 console.log("ist Spieler");
                 this.spieleRandomKarte();
             } else {
@@ -58,15 +66,16 @@ class KISPIELER extends SPIELER{
                     console.log("Zugeben");
                     this.farbeZugeben();
 
-                    this.spieleRandomKarte();
+                    this.abspatzen("Test nF");
                 }else{
                     console.log("Ist Frei");
 
-                    this.spieleRandomKarte();
+                    this.abspatzen("Test F");
                 }
             }
         }
 
+        console.log("!!ENDE KARTEN SUCHE!!")
     }
 
     /// Nicht Erster Spieler
@@ -147,28 +156,50 @@ class KISPIELER extends SPIELER{
     }
     
 
-    /// Change validCards
     ///
-    trumpfZugeben() {
-        for(var i = this.validCards.length-1; i >= 0; i--) {
-            var k = this.validCards[i];
-            if(!k.istTrumpf()) this.entferneValidCard(k.farbe, k.symbol);
+    /// spieleKarten
+    ///
+
+    trumpfAbspatzen(grund) {
+        var niedrigsteKarte = new KARTE("t", "t");
+
+        for(let k of this.validCards) {
+            if(k.getTrumpfHoehe(false) > niedrigsteKarte.getTrumpfHoehe(false) && !k.istKarte("h", "A") && !k.istKarte("h", "10")) {
+                niedrigsteKarte = k;
+            }
         }
-    }
-    farbeZugeben() {
-        for(var i = this.validCards.length-1; i >= 0; i--) {
-            var k = this.validCards[i];
-            if(k.istTrumpf() || k.farbe != stich[0].farbe) this.entferneValidCard(k.farbe, k.symbol);
+
+        if(niedrigsteKarte.symbol == "t") { // keine gefunden
+            if(this.karteInValidCards("h", "A")) niedrigsteKarte = new KARTE("h", "A");
+            if(this.karteInValidCards("h", "10")) niedrigsteKarte = new KARTE("h", "10");
         }
+
+        if(niedrigsteKarte.symbol =="t") console.log("abspatzen")
+        else this.spieleKarte(niedrigsteKarte.farbe, niedrigsteKarte.symbol, grund + " (Trumpf Abspatzen)");
+    }   
+    abspatzen(grund) {
+        var niedrigsteKarte = new KARTE("t", "t");
+
+        for(let k of this.validCards) {
+            if(k.getFarbKartenHoehe(false) > niedrigsteKarte.getFarbKartenHoehe(false)) {
+                niedrigsteKarte = k;
+            }
+        }
+
+        this.spieleKarte(niedrigsteKarte.farbe, niedrigsteKarte.symbol, grund + " (Abspatzen)");
     }
 
-    entferneValidCard(farbe, symbol) {
+    spieleRandomKarte() {
+        var index = Math.floor(Math.random() * this.validCards.length);
+        this.spieleKarte(this.validCards[index].farbe, this.validCards[index].symbol, "Keine Möglichkeit gefunden: random");
+    }
+    spieleKarte(farbe, symbol, grund) {
+        console.log(grund);
         var index = -1;
-        for(var i = 0; i < this.validCards.length; i++) if(this.validCards[i].farbe == farbe && this.validCards[i].symbol == symbol) index = i;
-        if(index != -1) this.validCards.splice(index, 1);
-        else console.log(`Karte: ${farbe} ${symbol} konnte nicht gefunden werden (bei entferneValidCard)`);
+        for(var i = 0; i < this.karten.length; i++) if(this.karten[i].farbe == farbe && this.karten[i].symbol == symbol) index = i;
+        addKarteToStich(this.karten[index]);
+        if(index != -1) this.karten.splice(index, 1);
     }
-
 
     /// Info validCards
     ///
@@ -192,43 +223,31 @@ class KISPIELER extends SPIELER{
         return karteInValidCards;
     }
 
+    /// Change validCards
     ///
-    /// spieleKarten
-    ///
-
-    trumpfAbspatzen(grund) {
-        console.log("trumpfAbspatzen" + grund)
-
-        var niedrigsteKarte = new KARTE("t", "t"); // t for Test
-        console.log(niedrigsteKarte.getTrumpfHoehe(false));
-
-        for(let k of this.validCards) {
-            if(k.getTrumpfHoehe(false) > niedrigsteKarte.getTrumpfHoehe(false) && !k.istKarte("h", "A") && !k.istKarte("h", "10")) {
-                niedrigsteKarte = k;
-            }
+    trumpfZugeben() {
+        for(var i = this.validCards.length-1; i >= 0; i--) {
+            var k = this.validCards[i];
+            if(!k.istTrumpf()) this.entferneValidCard(k.farbe, k.symbol);
         }
-
-        if(niedrigsteKarte.symbol == "t") { // keine gefunden
-            if(this.karteInValidCards("h", "A")) niedrigsteKarte = new KARTE("h", "A");
-            if(this.karteInValidCards("h", "10")) niedrigsteKarte = new KARTE("h", "10");
+    }
+    farbeZugeben() {
+        for(var i = this.validCards.length-1; i >= 0; i--) {
+            var k = this.validCards[i];
+            if(k.istTrumpf() || k.farbe != stich[0].farbe) this.entferneValidCard(k.farbe, k.symbol);
         }
-
-        if(niedrigsteKarte.symbol =="t") console.log("abspatzen")
-        else this.spieleKarte(niedrigsteKarte.farbe, niedrigsteKarte.symbol, grund);
     }
-
-    spieleRandomKarte() {
-        var index = Math.floor(Math.random() * this.validCards.length);
-        this.spieleKarte(this.validCards[index].farbe, this.validCards[index].symbol, "Keine Möglichkeit gefunden: random");
-    }
-
-    spieleKarte(farbe, symbol, grund) {
-        console.log(grund);
+    entferneValidCard(farbe, symbol) {
         var index = -1;
-        for(var i = 0; i < this.karten.length; i++) if(this.karten[i].farbe == farbe && this.karten[i].symbol == symbol) index = i;
-        addKarteToStich(this.karten[index], this);
-        if(index != -1) this.karten.splice(index, 1);
+        for(var i = 0; i < this.validCards.length; i++) if(this.validCards[i].farbe == farbe && this.validCards[i].symbol == symbol) index = i;
+        if(index != -1) this.validCards.splice(index, 1);
+        else console.log(`Karte: ${farbe} ${symbol} konnte nicht gefunden werden (bei entferneValidCard)`);
     }
+
+
+    
+
+    
 
 
 

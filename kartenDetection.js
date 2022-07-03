@@ -61,7 +61,7 @@ function cardDetectedRandom() {
 function cardDetected(farbe, symbol) {
   if(farbe && symbol) {
     if(currentState.stateName == "getKIKarten") spieler[KIpos].addKarteToKarten(farbe, symbol);
-    else addKarteToStich(deck.getKarte(farbe, symbol), spieler[currentState.spielerAmZug]);
+    else addKarteToStich(deck.getKarte(farbe, symbol));
   }else{
     console.log("ERROR: no card input");
   }

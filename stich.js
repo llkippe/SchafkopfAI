@@ -1,10 +1,4 @@
-/* 
-    karteVonSpieler fuer jeden Stich im voraus erstellen
-    updateSpielerAmZug nach Stich
-    update Namen nach Stich
 
-    dann weiter bei KI....
-*/
 
 
 var stich = [];
@@ -12,10 +6,10 @@ var karteVonSpieler = [];
 
 var runde = 1;
 
-function addKarteToStich(karte, spieler) {
+function addKarteToStich(karte) {
     if(karte) {
+
         stich.push(karte);
-        karteVonSpieler.push(spieler);
 
         if(karte.istKarte(ingame.saufarbe, "A")) spieler.istFreund = true;
 
@@ -23,9 +17,8 @@ function addKarteToStich(karte, spieler) {
 
         document.getElementById("card" + stich.length).style.backgroundImage = "url(Cards/"+ karte.farbe + karte.symbol +".png)";
         document.getElementById("card" + stich.length).style.border = "none";
-        document.getElementById("info" + stich.length).innerHTML = karteVonSpieler[karteVonSpieler.length-1].name;
 
-        if(stich.length == 4) resetStich();
+        
         currentState.naechsterZug();
     }else{
         console.log("WARNING: Card couldn't be found")
@@ -33,20 +26,32 @@ function addKarteToStich(karte, spieler) {
     
 }
 
-async function resetStich() {
+function resetStich() {
+    console.log(" ");
+
     runde++;
 
     if(runde <= 8) {
-        //Auswertung
         karteVonSpieler[hoechsteKarteInStich().position].updatePunkte(punkteInStich());
-        //Reset
-        stich = [];
-        karteVonSpieler = [];
+    ingame.setZugPosition(karteVonSpieler[hoechsteKarteInStich().position]);
 
-        //nur animation
-        await sleep(500);
-        resetHtmlStich();
+    karteVonSpieler = [];
+    var spielerAmZugFake = ingame.spielerAmZug;
+
+    for(var i = 0; i < 4; i++) {
+        karteVonSpieler.push(spieler[spielerAmZugFake]);
+        console.log(spielerAmZugFake);
+        document.getElementById(`info${i+1}`).innerHTML = karteVonSpieler[i].name;
+        spielerAmZugFake++;
+        if(spielerAmZugFake == 4) spielerAmZugFake = 0;
+    }
+
+    stich = [];
+    resetHtmlStich();
+
+    if(KIpos == ingame.spielerAmZug) spieler[KIpos].playCard();
     }else endOfGame();
+    
 }
 
 function resetHtmlStich() {
