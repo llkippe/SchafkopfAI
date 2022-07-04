@@ -1,8 +1,6 @@
 /*
-    - normales Abspatzen, damit nicht keine Karte gespielt werden kann
-    - dann checken ob stich alles funktioniert
-    - 
-    
+    - nach runde 8 soll enden (muss es 8 oder 9 sien in stich) 
+    - gucken, dass im stich nie 5 sind, zB KI ist neue Erste und dann wird einfach gespielt
 
 */
 
@@ -174,7 +172,7 @@ class KISPIELER extends SPIELER{
             if(this.karteInValidCards("h", "10")) niedrigsteKarte = new KARTE("h", "10");
         }
 
-        if(niedrigsteKarte.symbol =="t") console.log("abspatzen")
+        if(niedrigsteKarte.symbol =="t") this.abspatzen(grund + "von Trumpf Abspatzen");
         else this.spieleKarte(niedrigsteKarte.farbe, niedrigsteKarte.symbol, grund + " (Trumpf Abspatzen)");
     }   
     abspatzen(grund) {

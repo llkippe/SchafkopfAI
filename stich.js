@@ -31,7 +31,7 @@ function resetStich() {
 
     runde++;
 
-    if(runde <= 8) {
+    if(runde <= 9) {
         karteVonSpieler[hoechsteKarteInStich().position].updatePunkte(punkteInStich());
     ingame.setZugPosition(karteVonSpieler[hoechsteKarteInStich().position]);
 
