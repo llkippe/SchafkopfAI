@@ -1,6 +1,5 @@
 /*
-    - nach runde 8 soll enden (muss es 8 oder 9 sien in stich) 
-    - gucken, dass im stich nie 5 sind, zB KI ist neue Erste und dann wird einfach gespielt
+    
 
 */
 

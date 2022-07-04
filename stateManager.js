@@ -145,7 +145,10 @@ var ingame = {
     naechsterZug: function() {
         this.spielerAmZug++;
         if(this.spielerAmZug == 4) this.spielerAmZug = 0;
-        if(this.spielerAmZug == KIpos && stich.length <= 4) spieler[KIpos].playCard();
+        if(this.spielerAmZug == KIpos && stich.length <= 4) {
+            spieler[KIpos].playCard();
+            console.log("ne")
+        }else console.log("ja");
     },
 
     setZugPosition: function(player) {

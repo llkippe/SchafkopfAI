@@ -19,7 +19,7 @@ function addKarteToStich(karte) {
         document.getElementById("card" + stich.length).style.border = "none";
 
         
-        currentState.naechsterZug();
+        if(stich.length < 4) currentState.naechsterZug();
     }else{
         console.log("WARNING: Card couldn't be found")
     }
@@ -31,7 +31,7 @@ function resetStich() {
 
     runde++;
 
-    if(runde <= 9) {
+    if(runde <= 8) {
         karteVonSpieler[hoechsteKarteInStich().position].updatePunkte(punkteInStich());
     ingame.setZugPosition(karteVonSpieler[hoechsteKarteInStich().position]);
 
