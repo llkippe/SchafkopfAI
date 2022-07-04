@@ -139,6 +139,8 @@ var ingame = {
             document.getElementById(`info${i+1}`).innerHTML = karteVonSpieler[i].name;
         }
 
+        if(spieler[KIpos].karteInHand(this.saufarbe, "A")) spieler[parseInt(this.spielerPos)].istFreund = true;
+
         deck.createTrumpfReihenfolge();
         
     },

@@ -1,5 +1,6 @@
 /*
-    
+    =stich sichern richtig machen
+    - bei nichtFreiTrumpf weitermachen
 
 */
 
@@ -80,6 +81,23 @@ class KISPIELER extends SPIELER{
         /// Trumpf
         ///
         trumpfNichtFrei(){
+            if(stich.length == 3 && this.gehoertUns()) {
+                trumpfSchmieren("KI letzter, gehoert Uns");
+                return;
+            }
+            if(!this.gehoertUns() && hoechstenTrumpfInStich().karte.getTrumpfHoehe() < deck.hoechstenTrumpfInDeck().getTrumpfHoehe()) {
+                this.trumpfAbspatzen("Feind hat hoechsten Trumpf gelegt");
+                return;
+            } 
+            if(karteVonSpieler[hoechsteKarteInStich().position].istFreund && hoechstenTrumpfInStich().karte.getTrumpfHoehe() < deck.hoechstenTrumpfInDeck().getTrumpfHoehe()){
+                this.trumpfSchmieren("Freund hat hoechsten Trumpf gelegt")
+                return;
+            } 
+            if(punkteInStich() >= 10) {
+                this.stichSichern("Mehr als 10 Punkte");
+                return;
+            }
+            
             this.trumpfAbspatzen("keine Gute Möglichkeit gefunden");
         }
 
@@ -157,6 +175,24 @@ class KISPIELER extends SPIELER{
     /// spieleKarten
     ///
 
+    stichSichern(grund) {
+        // wenn letzter dann nur einen drueber
+        // wenn vorletzter und dahinter freund einer drueber
+        // wenn vor vor letzter und beiden hinteren freunde einer drubeer
+        // wenn hoechster hoeher als hoechster im Stich hoechster
+        // sonst trumpfabspatzen
+
+        this.spieleKarte(this.hoechsterTrumpfInValidCards().farbe, this.hoechsterTrumpfInValidCards().symbol, grund + " (Stich Sichern)");
+        
+    }
+
+    trumpfSchmieren(grund) {
+        if(this.karteInValidCards("h", "A")) this.spieleKarte("h", "A", grund + "(Trumpf Schmieren)");
+        else if(this.karteInValidCards("h", "10")) this.spieleKarte("h", "10", grund + "(Trumpf Schmieren)");
+        else if(this.karteInValidCards("h", "K")) this.spieleKarte("h", "K", grund + "(Trumpf Schmieren)");
+        else this.trumpfAbspatzen(grund + " (von Trumpf Schmieren)")
+    }
+
     trumpfAbspatzen(grund) {
         var niedrigsteKarte = new KARTE("t", "t");
 
@@ -219,6 +255,20 @@ class KISPIELER extends SPIELER{
         for (let k of this.validCards) if (k.istKarte(farbe, symbol)) karteInValidCards = true; 
         return karteInValidCards;
     }
+    hoechsterTrumpfInValidCards() {
+        var hoechsteKarte = new KARTE("invalid", "invalid");
+        for(let k of this.validCards) {
+            if(k.istTrumpf() && k.getTrumpfHoehe(true) < hoechsteKarte.getTrumpfHoehe(true)) hoechsteKarte = k;
+        }
+        return hoechsteKarte;
+    }
+    hoechsteFarbKarteInValidCards(farbe) {
+        var hoechsteKarte = new KARTE("invalid", "invalid");
+        for(let k of this.validCards) {
+            if(k.farbe == farbe && !k.istTrumpf() && k.getFarbKartenHoehe(true) < hoechsteKarte.getFarbKartenHoehe(true)) hoechsteKarte = k;
+        }
+        return hoechsteKarte;
+    }
 
     /// Change validCards
     ///
@@ -246,11 +296,28 @@ class KISPIELER extends SPIELER{
 
     
 
-
-
-
-
-
+    //
+    //  generell purpose
+    //
+    anzahlVonFarbe(farbe) {
+        var anzahl = 0; 
+        for (let k of this.karten) {
+            if (k.farbe == farbe && k.symbol != "U" && k.symbol != "O") anzahl++;
+        }
+        return anzahl;
+    }
+    anzahlVonSymbol(symbol) {
+        var anzahl = 0; 
+        for (let k of this.karten) {
+            if (k.symbol == symbol) anzahl++;
+        }
+        return anzahl;
+    }
+    karteInHand(farbe, symbol) {
+        var karteInHand = false; 
+        for (let k of this.karten) if (k.istKarte(farbe, symbol)) karteInHand = true; 
+        return karteInHand;
+    }
 
     //
     //  Spielwahl
@@ -334,31 +401,6 @@ class KISPIELER extends SPIELER{
         }
         return anzahl;
     }
-
-
-    //
-    //  generell purpose
-    //
-    anzahlVonFarbe(farbe) {
-        var anzahl = 0; 
-        for (let k of this.karten) {
-            if (k.farbe == farbe && k.symbol != "U" && k.symbol != "O") anzahl++;
-        }
-        return anzahl;
-    }
-    anzahlVonSymbol(symbol) {
-        var anzahl = 0; 
-        for (let k of this.karten) {
-            if (k.symbol == symbol) anzahl++;
-        }
-        return anzahl;
-    }
-    karteInHand(farbe, symbol) {
-        var karteInHand = false; 
-        for (let k of this.karten) if (k.istKarte(farbe, symbol)) karteInHand = true; 
-        return karteInHand;
-    }
-
 
     // 
     // GetKiKarten

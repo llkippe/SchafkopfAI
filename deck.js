@@ -9,6 +9,20 @@ class DECK{
     }   
 
 
+    hoechstenTrumpfInDeck() {
+        var hoechsteKarte = new KARTE("invalid", "invalid");
+        for(let k of this.deck) {
+            if(k.istTrumpf() && k.getTrumpfHoehe(true) < hoechsteKarte.getTrumpfHoehe(true)) hoechsteKarte = k;
+        }
+        return hoechsteKarte;
+    }
+    hoechsteFarbKarteInDeck(farbe) {
+        var hoechsteKarte = new KARTE("invalid", "invalid");
+        for(let k of this.deck) {
+            if(k.farbe == farbe && !k.istTrumpf() && k.getFarbKartenHoehe(true) < hoechsteKarte.getFarbKartenHoehe(true)) hoechsteKarte = k;
+        }
+        return hoechsteKarte;
+    }
 
     createTrumpfReihenfolge() {
         if(ingame.trumpfart == "U") {
@@ -30,7 +44,6 @@ class DECK{
             }
         }
     }
-    
     getKarte(farbe, symbol) {  // gibt karte aus deck zurueck + removed diese + error Meldung falls nicht vorhanden
         var index = -1;
         for(var i = 0; i < this.deck.length; i++) {
@@ -49,7 +62,6 @@ class DECK{
         var returnArr = [farbe, symbol]; 
         return returnArr;
     }
-
     convertToFullName(farbe, symbol) {
         var name;
         if(farbe == "e") name = "Eichel"

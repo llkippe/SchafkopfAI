@@ -11,7 +11,10 @@ function addKarteToStich(karte) {
 
         stich.push(karte);
 
-        if(karte.istKarte(ingame.saufarbe, "A")) spieler.istFreund = true;
+        if(karte.istKarte(ingame.saufarbe, "A")) {
+            if(parseInt(ingame.spielerPos) == KIpos) karteVonSpieler[stich.length-1].istFreund = true;
+            else for(var i = 0; i < 4; i++) if(i != KIpos && i != stich.length-1 && i != ingame.spielerPos) spieler[i].istFreund = true;
+        }
 
         console.log("Added " + deck.convertToFullName(karte.farbe, karte.symbol) + " to Stich (" + punkteInStich() + " Punkte im Stich)");
 
